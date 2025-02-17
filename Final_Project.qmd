@@ -2,7 +2,7 @@
 title: "final project"
 format: html
 editor: visual
-author: "Tarj Mecwan"
+author: "Tarj Mecwan, Bernice Lau"
 ---
 
 ## Quarto
