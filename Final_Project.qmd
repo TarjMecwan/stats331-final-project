@@ -17,6 +17,8 @@ execute:
 
 ## Dependencies
 
+To start, we need to load the `tidyverse` and `knitr` packages into RStudio.
+
 ```{r}
 #| message: false
 
@@ -26,9 +28,94 @@ library(knitr)
 
 ## Datasets
 
+Next, we will read in our datasets!
+
 ```{r}
 #| message: false
 
 poverty <- read_csv("data/poverty.csv")
 inflation <- read_csv("data/inflation.csv")
 ```
+
+Let's examine the `poverty.csv` dataset.
+
+```{r}
+head(poverty) |> 
+  kable()
+```
+
+Here's what the `inflation.csv` dataset looks like.
+
+```{r}
+head(inflation) |> 
+  kable()
+```
+
+**TODO**: Detailed data and variable description. (Rachel)
+
+-   Summarize the poverty dataset (Extreme Poverty Rate, less than $2.15/day)
+
+-   Summarze the inflation dataset (Inflation, annual %)
+
+
+### Data Cleaning
+
+**TODO**: Discussion of data cleaning process and decisions. (Tarj)
+
+```{r}
+# Filter the datasets to include only the overlapping years (1961 to 2023):
+
+inflation_filtered <- inflation |>
+  select(country, `1961`:`2023`)
+
+poverty_filtered <- poverty |>
+  select(country, `1961`:`2023`)
+
+```
+
+```{r}
+# 1.2 Pivoting Longer
+# Pivot the year columns to a single column in both datasets
+
+inflation_long <- inflation_filtered |>
+  pivot_longer(cols = `1961`:`2023`, 
+               names_to = "year", 
+               values_to = "inflation_rate") |>
+  mutate(year = as.numeric(year))
+
+poverty_long <- poverty_filtered |>
+  pivot_longer(cols = `1961`:`2023`, 
+               names_to = "year", 
+               values_to = "poverty_rate") |>
+  mutate(year = as.numeric(year))
+
+```
+
+```{r}
+# 1.3 Joining Datasets
+# Join the datasets on country and year
+
+poverty_inflation_data <- inflation_long |>
+  inner_join(poverty_long, by = c("country", "year"))
+
+```
+
+```{r}
+# Handle missing values
+
+poverty_inflation_data <- poverty_inflation_data |>
+  drop_na()
+
+```
+
+```{r}
+head(poverty_inflation_data) |>
+  kable()
+```
+**TODO**: Detailed data and variable description. (Rachel)
+
+-   Summarize the joined dataset
+
+## Hypothesis
+
+**TODO**: Hypothesized relationship between the variables (and any outside references). (Haley)
