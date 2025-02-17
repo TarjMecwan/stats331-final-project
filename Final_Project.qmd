@@ -1,27 +1,34 @@
 ---
-title: "final project"
-format: html
-editor: visual
+title: "Exploring Relationships Between Extreme Poverty Rates and Inflation Rates in the World"
 author: "Tarj Mecwan, Bernice Lau, Rachel Hartfelder, Haley Tran"
+format: 
+  html:
+    embed-resources: true
+    code-tools: true
+    code-fold: true
+    toc: true
+editor: source
+execute: 
+  error: true
+  echo: true
+  message: false
+  warning: false
 ---
 
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+## Dependencies
 
 ```{r}
-1 + 1
+#| message: false
+
+library(tidyverse)
+library(knitr)
 ```
 
-You can add options to executable code like this
+## Datasets
 
 ```{r}
-#| echo: false
-2 * 2
-```
+#| message: false
 
-The `echo: false` option disables the printing of code (only output is displayed).
+poverty <- read_csv("data/poverty.csv")
+inflation <- read_csv("data/inflation.csv")
+```
