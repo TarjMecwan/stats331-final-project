@@ -2,7 +2,7 @@
 title: "final project"
 format: html
 editor: visual
-author: "Tarj Mecwan, Bernice Lau, Rachel Hartfelder"
+author: "Tarj Mecwan, Bernice Lau, Rachel Hartfelder, Haley Tran"
 ---
 
 ## Quarto
