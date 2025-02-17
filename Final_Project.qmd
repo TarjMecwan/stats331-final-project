@@ -2,6 +2,7 @@
 title: "final project"
 format: html
 editor: visual
+author: "Tarj Mecwan"
 ---
 
 ## Quarto
