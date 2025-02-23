@@ -53,14 +53,36 @@ head(inflation) |>
 
 **TODO**: Detailed data and variable description. (Rachel)
 
--   Summarize the poverty dataset (Extreme Poverty Rate, less than $2.15/day)
+-   Summarize the poverty dataset (Extreme Poverty Rate, less than \$2.15/day)
 
 -   Summarze the inflation dataset (Inflation, annual %)
 
+# Data Cleaning Process and Decisions
 
-### Data Cleaning
+Data cleaning is a crucial step in ensuring that our analysis is based on accurate and meaningful data. Since the datasets from Gapminder contain economic indicators recorded across multiple years for different countries, we followed a structured cleaning process to prepare our data for analysis. Below, we outline the key steps and the rationale behind each decision.
 
-**TODO**: Discussion of data cleaning process and decisions. (Tarj)
+### Filtering Overlapping Years
+
+The original datasets contained economic data spanning different time periods, with some variables recorded in years that were not present in the other dataset. To maintain consistency, we filtered both datasets to include only the overlapping years, **1961 to 2023**. This step ensures that we are analyzing the relationship between extreme poverty rates and inflation rates over a common time period without introducing missing values due to mismatched years.
+
+### Reshaping the Data: Pivoting Longer
+
+The datasets were structured in a wide format, where each year was a separate column. For ease of analysis and visualization, we transformed them into a long format by pivoting the year columns into a single "year" variable. This conversion was necessary to perform operations like merging datasets and running regression models. We also ensured that the "year" column was treated as a numeric variable rather than a character string, enabling proper chronological analysis.
+
+### Merging the Datasets
+
+After reshaping, we joined the two datasets on the common columns: **"country"** and **"year"**. Given that some countries may have missing data for either variable, we chose an inner join to retain only the observations that exist in both datasets. This approach minimizes the risk of bias in our analysis by ensuring that each country-year pair has both poverty and inflation data available.
+
+### Handling Missing Values
+
+Economic data often contains missing values due to reporting inconsistencies or gaps in data collection. To address this, we dropped rows with missing values after merging the datasets. While other imputation techniques (such as mean or median substitution) could have been used, we opted for deletion to maintain the integrity of our statistical analysis and avoid introducing artificial patterns.
+
+### Final Dataset Verification
+
+After completing these steps, we inspected the cleaned dataset to confirm that:\
+- All countries and years were correctly aligned.\
+- No extraneous variables remained.\
+- The dataset was free of missing values.
 
 ```{r}
 # Filter the datasets to include only the overlapping years (1961 to 2023):
@@ -112,6 +134,7 @@ poverty_inflation_data <- poverty_inflation_data |>
 head(poverty_inflation_data) |>
   kable()
 ```
+
 **TODO**: Detailed data and variable description. (Rachel)
 
 -   Summarize the joined dataset
