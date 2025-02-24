@@ -6154,25 +6154,6 @@ vertical-align: -.125em;
 <section id="filtering-overlapping-years" class="level3">
 <h3 class="anchored" data-anchor-id="filtering-overlapping-years">Filtering Overlapping Years</h3>
 <p>The original datasets contained economic data spanning different time periods, with some variables recorded in years that were not present in the other dataset. To maintain consistency, we filtered both datasets to include only the overlapping years, <strong>1961 to 2023</strong>. This step ensures that we are analyzing the relationship between extreme poverty rates and inflation rates over a common time period without introducing missing values due to mismatched years.</p>
-</section>
-<section id="reshaping-the-data-pivoting-longer" class="level3">
-<h3 class="anchored" data-anchor-id="reshaping-the-data-pivoting-longer">Reshaping the Data: Pivoting Longer</h3>
-<p>The datasets were structured in a wide format, where each year was a separate column. For ease of analysis and visualization, we transformed them into a long format by pivoting the year columns into a single “year” variable. This conversion was necessary to perform operations like merging datasets and running regression models. We also ensured that the “year” column was treated as a numeric variable rather than a character string, enabling proper chronological analysis.</p>
-</section>
-<section id="merging-the-datasets" class="level3">
-<h3 class="anchored" data-anchor-id="merging-the-datasets">Merging the Datasets</h3>
-<p>After reshaping, we joined the two datasets on the common columns: <strong>“country”</strong> and <strong>“year”</strong>. Given that some countries may have missing data for either variable, we chose an inner join to retain only the observations that exist in both datasets. This approach minimizes the risk of bias in our analysis by ensuring that each country-year pair has both poverty and inflation data available.</p>
-</section>
-<section id="handling-missing-values" class="level3">
-<h3 class="anchored" data-anchor-id="handling-missing-values">Handling Missing Values</h3>
-<p>Economic data often contains missing values due to reporting inconsistencies or gaps in data collection. To address this, we dropped rows with missing values after merging the datasets. While other imputation techniques (such as mean or median substitution) could have been used, we opted for deletion to maintain the integrity of our statistical analysis and avoid introducing artificial patterns.</p>
-</section>
-<section id="final-dataset-verification" class="level3">
-<h3 class="anchored" data-anchor-id="final-dataset-verification">Final Dataset Verification</h3>
-<p>After completing these steps, we inspected the cleaned dataset to confirm that:<br>
-- All countries and years were correctly aligned.<br>
-- No extraneous variables remained.<br>
-- The dataset was free of missing values.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -6185,6 +6166,10 @@ vertical-align: -.125em;
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, <span class="st">`</span><span class="at">1961</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2023</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+</section>
+<section id="reshaping-the-data-pivoting-longer" class="level3">
+<h3 class="anchored" data-anchor-id="reshaping-the-data-pivoting-longer">Reshaping the Data: Pivoting Longer</h3>
+<p>The datasets were structured in a wide format, where each year was a separate column. For ease of analysis and visualization, we transformed them into a long format by pivoting the year columns into a single <code>year</code> variable. This conversion was necessary to perform operations like merging datasets and running regression models. We also ensured that the <code>year</code> column was treated as a numeric variable rather than a character string, enabling proper chronological analysis.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -6204,6 +6189,10 @@ vertical-align: -.125em;
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.numeric</span>(year))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+</section>
+<section id="merging-the-datasets" class="level3">
+<h3 class="anchored" data-anchor-id="merging-the-datasets">Merging the Datasets</h3>
+<p>After reshaping, we joined the two datasets on the common columns: <code>country</code> and <code>year</code>. Given that some countries may have missing data for either variable, we chose an inner join to retain only the observations that exist in both datasets. This approach minimizes the risk of bias in our analysis by ensuring that each <code>country-year</code> pair has both poverty and inflation data available.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -6214,6 +6203,10 @@ vertical-align: -.125em;
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(poverty_long, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;country&quot;</span>, <span class="st">&quot;year&quot;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+</section>
+<section id="handling-missing-values" class="level3">
+<h3 class="anchored" data-anchor-id="handling-missing-values">Handling Missing Values</h3>
+<p>Economic data often contains missing values due to reporting inconsistencies or gaps in data collection. To address this, we dropped rows with missing values after merging the datasets. While other imputation techniques (such as mean or median substitution) could have been used, we opted for deletion to maintain the integrity of our statistical analysis and avoid introducing artificial patterns.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -6223,6 +6216,15 @@ vertical-align: -.125em;
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+</section>
+<section id="final-dataset-verification" class="level3">
+<h3 class="anchored" data-anchor-id="final-dataset-verification">Final Dataset Verification</h3>
+<p>After completing these steps, we inspected the cleaned dataset to confirm that:</p>
+<ul>
+<li><p>All countries and years were correctly aligned.</p></li>
+<li><p>No extraneous variables remained.</p></li>
+<li><p>The dataset was free of missing values.</p></li>
+</ul>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -6830,83 +6832,86 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a>The original datasets contained economic data spanning different time periods, with some variables recorded in years that were not present in the other dataset. To maintain consistency, we filtered both datasets to include only the overlapping years, **1961 to 2023**. This step ensures that we are analyzing the relationship between extreme poverty rates and inflation rates over a common time period without introducing missing values due to mismatched years.</span>
 <span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a><span class="fu">### Reshaping the Data: Pivoting Longer</span></span>
-<span id="cb10-77"><a href="#cb10-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a>The datasets were structured in a wide format, where each year was a separate column. For ease of analysis and visualization, we transformed them into a long format by pivoting the year columns into a single &quot;year&quot; variable. This conversion was necessary to perform operations like merging datasets and running regression models. We also ensured that the &quot;year&quot; column was treated as a numeric variable rather than a character string, enabling proper chronological analysis.</span>
-<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a><span class="fu">### Merging the Datasets</span></span>
-<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a>After reshaping, we joined the two datasets on the common columns: **&quot;country&quot;** and **&quot;year&quot;**. Given that some countries may have missing data for either variable, we chose an inner join to retain only the observations that exist in both datasets. This approach minimizes the risk of bias in our analysis by ensuring that each country-year pair has both poverty and inflation data available.</span>
+<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the datasets to include only the overlapping years (1961 to 2023):</span></span>
+<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a>inflation_filtered <span class="ot">&lt;-</span> inflation <span class="sc">|&gt;</span></span>
+<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, <span class="st">`</span><span class="at">1961</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2023</span><span class="st">`</span>)</span>
 <span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a><span class="fu">### Handling Missing Values</span></span>
-<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a>Economic data often contains missing values due to reporting inconsistencies or gaps in data collection. To address this, we dropped rows with missing values after merging the datasets. While other imputation techniques (such as mean or median substitution) could have been used, we opted for deletion to maintain the integrity of our statistical analysis and avoid introducing artificial patterns.</span>
-<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a><span class="fu">### Final Dataset Verification</span></span>
-<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a>After completing these steps, we inspected the cleaned dataset to confirm that:\</span>
-<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>All countries and years were correctly aligned.\</span>
-<span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>No extraneous variables remained.\</span>
-<span id="cb10-93"><a href="#cb10-93" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The dataset was free of missing values.</span>
-<span id="cb10-94"><a href="#cb10-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-97"><a href="#cb10-97" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb10-98"><a href="#cb10-98" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the datasets to include only the overlapping years (1961 to 2023):</span></span>
-<span id="cb10-99"><a href="#cb10-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-100"><a href="#cb10-100" aria-hidden="true" tabindex="-1"></a>inflation_filtered <span class="ot">&lt;-</span> inflation <span class="sc">|&gt;</span></span>
-<span id="cb10-101"><a href="#cb10-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, <span class="st">`</span><span class="at">1961</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2023</span><span class="st">`</span>)</span>
-<span id="cb10-102"><a href="#cb10-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-103"><a href="#cb10-103" aria-hidden="true" tabindex="-1"></a>poverty_filtered <span class="ot">&lt;-</span> poverty <span class="sc">|&gt;</span></span>
-<span id="cb10-104"><a href="#cb10-104" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, <span class="st">`</span><span class="at">1961</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2023</span><span class="st">`</span>)</span>
-<span id="cb10-105"><a href="#cb10-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-106"><a href="#cb10-106" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-107"><a href="#cb10-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-110"><a href="#cb10-110" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb10-111"><a href="#cb10-111" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.2 Pivoting Longer</span></span>
-<span id="cb10-112"><a href="#cb10-112" aria-hidden="true" tabindex="-1"></a><span class="co"># Pivot the year columns to a single column in both datasets</span></span>
-<span id="cb10-113"><a href="#cb10-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-114"><a href="#cb10-114" aria-hidden="true" tabindex="-1"></a>inflation_long <span class="ot">&lt;-</span> inflation_filtered <span class="sc">|&gt;</span></span>
-<span id="cb10-115"><a href="#cb10-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="st">`</span><span class="at">1961</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2023</span><span class="st">`</span>, </span>
-<span id="cb10-116"><a href="#cb10-116" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>, </span>
-<span id="cb10-117"><a href="#cb10-117" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;inflation_rate&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb10-118"><a href="#cb10-118" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.numeric</span>(year))</span>
-<span id="cb10-119"><a href="#cb10-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-120"><a href="#cb10-120" aria-hidden="true" tabindex="-1"></a>poverty_long <span class="ot">&lt;-</span> poverty_filtered <span class="sc">|&gt;</span></span>
-<span id="cb10-121"><a href="#cb10-121" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="st">`</span><span class="at">1961</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2023</span><span class="st">`</span>, </span>
-<span id="cb10-122"><a href="#cb10-122" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>, </span>
-<span id="cb10-123"><a href="#cb10-123" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;poverty_rate&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb10-124"><a href="#cb10-124" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.numeric</span>(year))</span>
+<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a>poverty_filtered <span class="ot">&lt;-</span> poverty <span class="sc">|&gt;</span></span>
+<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, <span class="st">`</span><span class="at">1961</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2023</span><span class="st">`</span>)</span>
+<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a><span class="fu">### Reshaping the Data: Pivoting Longer</span></span>
+<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a>The datasets were structured in a wide format, where each year was a separate column. For ease of analysis and visualization, we transformed them into a long format by pivoting the year columns into a single <span class="in">`year`</span> variable. This conversion was necessary to perform operations like merging datasets and running regression models. We also ensured that the <span class="in">`year`</span> column was treated as a numeric variable rather than a character string, enabling proper chronological analysis.</span>
+<span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-95"><a href="#cb10-95" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb10-96"><a href="#cb10-96" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.2 Pivoting Longer</span></span>
+<span id="cb10-97"><a href="#cb10-97" aria-hidden="true" tabindex="-1"></a><span class="co"># Pivot the year columns to a single column in both datasets</span></span>
+<span id="cb10-98"><a href="#cb10-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-99"><a href="#cb10-99" aria-hidden="true" tabindex="-1"></a>inflation_long <span class="ot">&lt;-</span> inflation_filtered <span class="sc">|&gt;</span></span>
+<span id="cb10-100"><a href="#cb10-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="st">`</span><span class="at">1961</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2023</span><span class="st">`</span>, </span>
+<span id="cb10-101"><a href="#cb10-101" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>, </span>
+<span id="cb10-102"><a href="#cb10-102" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;inflation_rate&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-103"><a href="#cb10-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.numeric</span>(year))</span>
+<span id="cb10-104"><a href="#cb10-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-105"><a href="#cb10-105" aria-hidden="true" tabindex="-1"></a>poverty_long <span class="ot">&lt;-</span> poverty_filtered <span class="sc">|&gt;</span></span>
+<span id="cb10-106"><a href="#cb10-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="st">`</span><span class="at">1961</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2023</span><span class="st">`</span>, </span>
+<span id="cb10-107"><a href="#cb10-107" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>, </span>
+<span id="cb10-108"><a href="#cb10-108" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;poverty_rate&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-109"><a href="#cb10-109" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.numeric</span>(year))</span>
+<span id="cb10-110"><a href="#cb10-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-111"><a href="#cb10-111" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-112"><a href="#cb10-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-113"><a href="#cb10-113" aria-hidden="true" tabindex="-1"></a><span class="fu">### Merging the Datasets</span></span>
+<span id="cb10-114"><a href="#cb10-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-115"><a href="#cb10-115" aria-hidden="true" tabindex="-1"></a>After reshaping, we joined the two datasets on the common columns: <span class="in">`country`</span> and <span class="in">`year`</span>. Given that some countries may have missing data for either variable, we chose an inner join to retain only the observations that exist in both datasets. This approach minimizes the risk of bias in our analysis by ensuring that each <span class="in">`country-year`</span> pair has both poverty and inflation data available.</span>
+<span id="cb10-116"><a href="#cb10-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-119"><a href="#cb10-119" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb10-120"><a href="#cb10-120" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.3 Joining Datasets</span></span>
+<span id="cb10-121"><a href="#cb10-121" aria-hidden="true" tabindex="-1"></a><span class="co"># Join the datasets on country and year</span></span>
+<span id="cb10-122"><a href="#cb10-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-123"><a href="#cb10-123" aria-hidden="true" tabindex="-1"></a>poverty_inflation_data <span class="ot">&lt;-</span> inflation_long <span class="sc">|&gt;</span></span>
+<span id="cb10-124"><a href="#cb10-124" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(poverty_long, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;country&quot;</span>, <span class="st">&quot;year&quot;</span>))</span>
 <span id="cb10-125"><a href="#cb10-125" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-126"><a href="#cb10-126" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb10-127"><a href="#cb10-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-130"><a href="#cb10-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb10-131"><a href="#cb10-131" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.3 Joining Datasets</span></span>
-<span id="cb10-132"><a href="#cb10-132" aria-hidden="true" tabindex="-1"></a><span class="co"># Join the datasets on country and year</span></span>
-<span id="cb10-133"><a href="#cb10-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-134"><a href="#cb10-134" aria-hidden="true" tabindex="-1"></a>poverty_inflation_data <span class="ot">&lt;-</span> inflation_long <span class="sc">|&gt;</span></span>
-<span id="cb10-135"><a href="#cb10-135" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(poverty_long, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;country&quot;</span>, <span class="st">&quot;year&quot;</span>))</span>
+<span id="cb10-128"><a href="#cb10-128" aria-hidden="true" tabindex="-1"></a><span class="fu">### Handling Missing Values</span></span>
+<span id="cb10-129"><a href="#cb10-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-130"><a href="#cb10-130" aria-hidden="true" tabindex="-1"></a>Economic data often contains missing values due to reporting inconsistencies or gaps in data collection. To address this, we dropped rows with missing values after merging the datasets. While other imputation techniques (such as mean or median substitution) could have been used, we opted for deletion to maintain the integrity of our statistical analysis and avoid introducing artificial patterns.</span>
+<span id="cb10-131"><a href="#cb10-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-134"><a href="#cb10-134" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb10-135"><a href="#cb10-135" aria-hidden="true" tabindex="-1"></a><span class="co"># Handle missing values</span></span>
 <span id="cb10-136"><a href="#cb10-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-137"><a href="#cb10-137" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-138"><a href="#cb10-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-141"><a href="#cb10-141" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb10-142"><a href="#cb10-142" aria-hidden="true" tabindex="-1"></a><span class="co"># Handle missing values</span></span>
+<span id="cb10-137"><a href="#cb10-137" aria-hidden="true" tabindex="-1"></a>poverty_inflation_data <span class="ot">&lt;-</span> poverty_inflation_data <span class="sc">|&gt;</span></span>
+<span id="cb10-138"><a href="#cb10-138" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb10-139"><a href="#cb10-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-140"><a href="#cb10-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-141"><a href="#cb10-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-142"><a href="#cb10-142" aria-hidden="true" tabindex="-1"></a><span class="fu">### Final Dataset Verification</span></span>
 <span id="cb10-143"><a href="#cb10-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-144"><a href="#cb10-144" aria-hidden="true" tabindex="-1"></a>poverty_inflation_data <span class="ot">&lt;-</span> poverty_inflation_data <span class="sc">|&gt;</span></span>
-<span id="cb10-145"><a href="#cb10-145" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
-<span id="cb10-146"><a href="#cb10-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-147"><a href="#cb10-147" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-148"><a href="#cb10-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-151"><a href="#cb10-151" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb10-152"><a href="#cb10-152" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(poverty_inflation_data) <span class="sc">|&gt;</span></span>
-<span id="cb10-153"><a href="#cb10-153" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
-<span id="cb10-154"><a href="#cb10-154" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-155"><a href="#cb10-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-156"><a href="#cb10-156" aria-hidden="true" tabindex="-1"></a>**TODO**: Detailed data and variable description. (Rachel)</span>
-<span id="cb10-157"><a href="#cb10-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-158"><a href="#cb10-158" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Summarize the joined dataset</span>
-<span id="cb10-159"><a href="#cb10-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-160"><a href="#cb10-160" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hypothesis</span></span>
-<span id="cb10-161"><a href="#cb10-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-162"><a href="#cb10-162" aria-hidden="true" tabindex="-1"></a>**TODO**: Hypothesized relationship between the variables (and any outside references). (Haley)</span>
+<span id="cb10-144"><a href="#cb10-144" aria-hidden="true" tabindex="-1"></a>After completing these steps, we inspected the cleaned dataset to confirm that:</span>
+<span id="cb10-145"><a href="#cb10-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-146"><a href="#cb10-146" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>All countries and years were correctly aligned.</span>
+<span id="cb10-147"><a href="#cb10-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-148"><a href="#cb10-148" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>No extraneous variables remained.</span>
+<span id="cb10-149"><a href="#cb10-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-150"><a href="#cb10-150" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>The dataset was free of missing values.</span>
+<span id="cb10-151"><a href="#cb10-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-154"><a href="#cb10-154" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb10-155"><a href="#cb10-155" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(poverty_inflation_data) <span class="sc">|&gt;</span></span>
+<span id="cb10-156"><a href="#cb10-156" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
+<span id="cb10-157"><a href="#cb10-157" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-158"><a href="#cb10-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-159"><a href="#cb10-159" aria-hidden="true" tabindex="-1"></a>**TODO**: Detailed data and variable description. (Rachel)</span>
+<span id="cb10-160"><a href="#cb10-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-161"><a href="#cb10-161" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Summarize the joined dataset</span>
+<span id="cb10-162"><a href="#cb10-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-163"><a href="#cb10-163" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hypothesis</span></span>
+<span id="cb10-164"><a href="#cb10-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-165"><a href="#cb10-165" aria-hidden="true" tabindex="-1"></a>**TODO**: Hypothesized relationship between the variables (and any outside references). (Haley)</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

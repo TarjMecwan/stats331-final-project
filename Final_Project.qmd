@@ -65,25 +65,6 @@ Data cleaning is a crucial step in ensuring that our analysis is based on accura
 
 The original datasets contained economic data spanning different time periods, with some variables recorded in years that were not present in the other dataset. To maintain consistency, we filtered both datasets to include only the overlapping years, **1961 to 2023**. This step ensures that we are analyzing the relationship between extreme poverty rates and inflation rates over a common time period without introducing missing values due to mismatched years.
 
-### Reshaping the Data: Pivoting Longer
-
-The datasets were structured in a wide format, where each year was a separate column. For ease of analysis and visualization, we transformed them into a long format by pivoting the year columns into a single "year" variable. This conversion was necessary to perform operations like merging datasets and running regression models. We also ensured that the "year" column was treated as a numeric variable rather than a character string, enabling proper chronological analysis.
-
-### Merging the Datasets
-
-After reshaping, we joined the two datasets on the common columns: **"country"** and **"year"**. Given that some countries may have missing data for either variable, we chose an inner join to retain only the observations that exist in both datasets. This approach minimizes the risk of bias in our analysis by ensuring that each country-year pair has both poverty and inflation data available.
-
-### Handling Missing Values
-
-Economic data often contains missing values due to reporting inconsistencies or gaps in data collection. To address this, we dropped rows with missing values after merging the datasets. While other imputation techniques (such as mean or median substitution) could have been used, we opted for deletion to maintain the integrity of our statistical analysis and avoid introducing artificial patterns.
-
-### Final Dataset Verification
-
-After completing these steps, we inspected the cleaned dataset to confirm that:\
-- All countries and years were correctly aligned.\
-- No extraneous variables remained.\
-- The dataset was free of missing values.
-
 ```{r}
 # Filter the datasets to include only the overlapping years (1961 to 2023):
 
@@ -94,6 +75,10 @@ poverty_filtered <- poverty |>
   select(country, `1961`:`2023`)
 
 ```
+
+### Reshaping the Data: Pivoting Longer
+
+The datasets were structured in a wide format, where each year was a separate column. For ease of analysis and visualization, we transformed them into a long format by pivoting the year columns into a single `year` variable. This conversion was necessary to perform operations like merging datasets and running regression models. We also ensured that the `year` column was treated as a numeric variable rather than a character string, enabling proper chronological analysis.
 
 ```{r}
 # 1.2 Pivoting Longer
@@ -113,6 +98,10 @@ poverty_long <- poverty_filtered |>
 
 ```
 
+### Merging the Datasets
+
+After reshaping, we joined the two datasets on the common columns: `country` and `year`. Given that some countries may have missing data for either variable, we chose an inner join to retain only the observations that exist in both datasets. This approach minimizes the risk of bias in our analysis by ensuring that each `country-year` pair has both poverty and inflation data available.
+
 ```{r}
 # 1.3 Joining Datasets
 # Join the datasets on country and year
@@ -122,6 +111,10 @@ poverty_inflation_data <- inflation_long |>
 
 ```
 
+### Handling Missing Values
+
+Economic data often contains missing values due to reporting inconsistencies or gaps in data collection. To address this, we dropped rows with missing values after merging the datasets. While other imputation techniques (such as mean or median substitution) could have been used, we opted for deletion to maintain the integrity of our statistical analysis and avoid introducing artificial patterns.
+
 ```{r}
 # Handle missing values
 
@@ -129,6 +122,16 @@ poverty_inflation_data <- poverty_inflation_data |>
   drop_na()
 
 ```
+
+### Final Dataset Verification
+
+After completing these steps, we inspected the cleaned dataset to confirm that:
+
+-   All countries and years were correctly aligned.
+
+-   No extraneous variables remained.
+
+-   The dataset was free of missing values.
 
 ```{r}
 head(poverty_inflation_data) |>
