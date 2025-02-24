@@ -51,13 +51,7 @@ head(inflation) |>
   kable()
 ```
 
-**TODO**: Detailed data and variable description. (Rachel)
-
--   Summarize the poverty dataset (Extreme Poverty Rate, less than \$2.15/day)
-
--   Summarze the inflation dataset (Inflation, annual %)
-
-The poverty dataset contains information on the poverty rate for countries over time. Each country represents one observation and each column represents one year. The inflation dataset contains information on the inflation rate for countries over time. Similar to the poverty dataset, each country represents one observation and each column represents one year. The poverty dataset contains information on the years 1800 to 2100 while the inflation dataset only contains information on the years 1961 to 2023. Both datasets contain numerous NA values.
+The poverty dataset contains information on the extreme poverty rate, where workers make less than $2.15/day, for countries over time. Each country represents one observation and each column represents one year. The inflation dataset contains information on the inflation rate for countries over time. Similar to the poverty dataset, each country represents one observation and each column represents one year. The poverty dataset contains information on the years 1800 to 2100, while the inflation dataset only contains information on the years 1961 to 2023. Both datasets contain numerous NA values.
 
 ## Data Cleaning Process
 
@@ -68,8 +62,7 @@ Data cleaning is a crucial step in ensuring that our analysis is based on accura
 The original datasets contained economic data spanning different time periods, with some variables recorded in years that were not present in the other dataset. To maintain consistency, we filtered both datasets to include only the overlapping years, **1961 to 2023**. This step ensures that we are analyzing the relationship between extreme poverty rates and inflation rates over a common time period without introducing missing values due to mismatched years.
 
 ```{r}
-# Filter the datasets to include only the overlapping years (1961 to 2023):
-
+# Filter the datasets to include only the overlapping years (1961 to 2023)
 inflation_filtered <- inflation |>
   select(country, `1961`:`2023`)
 
@@ -85,7 +78,6 @@ The datasets were structured in a wide format, where each year was a separate co
 ```{r}
 # 1.2 Pivoting Longer
 # Pivot the year columns to a single column in both datasets
-
 inflation_long <- inflation_filtered |>
   pivot_longer(cols = `1961`:`2023`, 
                names_to = "year", 
@@ -107,7 +99,6 @@ After reshaping, we joined the two datasets on the common columns: `country` and
 ```{r}
 # 1.3 Joining Datasets
 # Join the datasets on country and year
-
 poverty_inflation_data <- inflation_long |>
   inner_join(poverty_long, by = c("country", "year"))
 
@@ -119,13 +110,33 @@ Economic data often contains missing values due to reporting inconsistencies or 
 
 ```{r}
 # Handle missing values
-
 poverty_inflation_data <- poverty_inflation_data |>
   drop_na()
 
 ```
 
-#### 5. Final Dataset Verification
+#### 5. Handling Variable Type Conversions
+
+- Convert inflation_rate from character to numeric type
+**TO DO** (Tarj)
+
+```{r}
+#| warning: false
+#| message: false
+
+# Replace non-standard minus signs with the standard minus sign
+poverty_inflation_data <- poverty_inflation_data |>
+  mutate(inflation_rate = gsub("\u2212", "-", inflation_rate)) 
+
+# Handle 'k' suffix for thousands and convert to numeric
+poverty_inflation_data <- poverty_inflation_data |>
+  mutate(inflation_rate = ifelse(
+    grepl("k", inflation_rate, ignore.case = TRUE),
+    as.numeric(gsub("k", "", inflation_rate, ignore.case = TRUE)) * 1000,
+    as.numeric(inflation_rate)))
+```
+
+#### 6. Final Dataset Verification
 
 After completing these steps, we inspected the cleaned dataset to confirm that:
 
@@ -140,9 +151,15 @@ head(poverty_inflation_data) |>
   kable()
 ```
 
-**TODO**: Detailed data and variable description. (Rachel)
+Now, we can save the cleaned dataset into a CSV!
 
--   Summarize the joined dataset
+```{r}
+# Save the cleaned data frame to a CSV
+write_csv(poverty_inflation_data, "data/poverty_inflation_data.csv")
+```
+
+The joined dataset contains 10,163 observations and 4 variables: `country` of type character, `year` of type numeric, `inflation_rate` of type numeric, and `poverty_rate` of type numeric. Each `country-year` pair represents one observation. The dataset contains the annual inflation and extreme poverty rates for each country from 1961 to 2023.
+
 
 ## Hypothesis
 
