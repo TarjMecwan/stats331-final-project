@@ -3090,15 +3090,8 @@ vertical-align: -.125em;
   <ul>
   <li><a href="#dependencies" id="toc-dependencies" class="nav-link active" data-scroll-target="#dependencies">Dependencies</a></li>
   <li><a href="#datasets" id="toc-datasets" class="nav-link" data-scroll-target="#datasets">Datasets</a></li>
-  <li><a href="#data-cleaning-process-and-decisions" id="toc-data-cleaning-process-and-decisions" class="nav-link" data-scroll-target="#data-cleaning-process-and-decisions">Data Cleaning Process and Decisions</a>
-  <ul class="collapse">
-  <li><a href="#filtering-overlapping-years" id="toc-filtering-overlapping-years" class="nav-link" data-scroll-target="#filtering-overlapping-years">Filtering Overlapping Years</a></li>
-  <li><a href="#reshaping-the-data-pivoting-longer" id="toc-reshaping-the-data-pivoting-longer" class="nav-link" data-scroll-target="#reshaping-the-data-pivoting-longer">Reshaping the Data: Pivoting Longer</a></li>
-  <li><a href="#merging-the-datasets" id="toc-merging-the-datasets" class="nav-link" data-scroll-target="#merging-the-datasets">Merging the Datasets</a></li>
-  <li><a href="#handling-missing-values" id="toc-handling-missing-values" class="nav-link" data-scroll-target="#handling-missing-values">Handling Missing Values</a></li>
-  <li><a href="#final-dataset-verification" id="toc-final-dataset-verification" class="nav-link" data-scroll-target="#final-dataset-verification">Final Dataset Verification</a></li>
+  <li><a href="#data-cleaning-process" id="toc-data-cleaning-process" class="nav-link" data-scroll-target="#data-cleaning-process">Data Cleaning Process</a></li>
   <li><a href="#hypothesis" id="toc-hypothesis" class="nav-link" data-scroll-target="#hypothesis">Hypothesis</a></li>
-  </ul></li>
   </ul>
 </nav>
 </div>
@@ -6148,11 +6141,11 @@ vertical-align: -.125em;
 <li><p>Summarze the inflation dataset (Inflation, annual %)</p></li>
 </ul>
 </section>
-<section id="data-cleaning-process-and-decisions" class="level1">
-<h1>Data Cleaning Process and Decisions</h1>
+<section id="data-cleaning-process" class="level2">
+<h2 class="anchored" data-anchor-id="data-cleaning-process">Data Cleaning Process</h2>
 <p>Data cleaning is a crucial step in ensuring that our analysis is based on accurate and meaningful data. Since the datasets from Gapminder contain economic indicators recorded across multiple years for different countries, we followed a structured cleaning process to prepare our data for analysis. Below, we outline the key steps and the rationale behind each decision.</p>
-<section id="filtering-overlapping-years" class="level3">
-<h3 class="anchored" data-anchor-id="filtering-overlapping-years">Filtering Overlapping Years</h3>
+<section id="filtering-overlapping-years" class="level4">
+<h4 class="anchored" data-anchor-id="filtering-overlapping-years">1. Filtering Overlapping Years</h4>
 <p>The original datasets contained economic data spanning different time periods, with some variables recorded in years that were not present in the other dataset. To maintain consistency, we filtered both datasets to include only the overlapping years, <strong>1961 to 2023</strong>. This step ensures that we are analyzing the relationship between extreme poverty rates and inflation rates over a common time period without introducing missing values due to mismatched years.</p>
 <div class="cell">
 <details class="code-fold">
@@ -6167,8 +6160,8 @@ vertical-align: -.125em;
 </details>
 </div>
 </section>
-<section id="reshaping-the-data-pivoting-longer" class="level3">
-<h3 class="anchored" data-anchor-id="reshaping-the-data-pivoting-longer">Reshaping the Data: Pivoting Longer</h3>
+<section id="reshaping-the-data-pivoting-longer" class="level4">
+<h4 class="anchored" data-anchor-id="reshaping-the-data-pivoting-longer">2. Reshaping the Data: Pivoting Longer</h4>
 <p>The datasets were structured in a wide format, where each year was a separate column. For ease of analysis and visualization, we transformed them into a long format by pivoting the year columns into a single <code>year</code> variable. This conversion was necessary to perform operations like merging datasets and running regression models. We also ensured that the <code>year</code> column was treated as a numeric variable rather than a character string, enabling proper chronological analysis.</p>
 <div class="cell">
 <details class="code-fold">
@@ -6190,8 +6183,8 @@ vertical-align: -.125em;
 </details>
 </div>
 </section>
-<section id="merging-the-datasets" class="level3">
-<h3 class="anchored" data-anchor-id="merging-the-datasets">Merging the Datasets</h3>
+<section id="merging-the-datasets" class="level4">
+<h4 class="anchored" data-anchor-id="merging-the-datasets">3. Merging the Datasets</h4>
 <p>After reshaping, we joined the two datasets on the common columns: <code>country</code> and <code>year</code>. Given that some countries may have missing data for either variable, we chose an inner join to retain only the observations that exist in both datasets. This approach minimizes the risk of bias in our analysis by ensuring that each <code>country-year</code> pair has both poverty and inflation data available.</p>
 <div class="cell">
 <details class="code-fold">
@@ -6204,8 +6197,8 @@ vertical-align: -.125em;
 </details>
 </div>
 </section>
-<section id="handling-missing-values" class="level3">
-<h3 class="anchored" data-anchor-id="handling-missing-values">Handling Missing Values</h3>
+<section id="handling-missing-values" class="level4">
+<h4 class="anchored" data-anchor-id="handling-missing-values">4. Handling Missing Values</h4>
 <p>Economic data often contains missing values due to reporting inconsistencies or gaps in data collection. To address this, we dropped rows with missing values after merging the datasets. While other imputation techniques (such as mean or median substitution) could have been used, we opted for deletion to maintain the integrity of our statistical analysis and avoid introducing artificial patterns.</p>
 <div class="cell">
 <details class="code-fold">
@@ -6217,8 +6210,8 @@ vertical-align: -.125em;
 </details>
 </div>
 </section>
-<section id="final-dataset-verification" class="level3">
-<h3 class="anchored" data-anchor-id="final-dataset-verification">Final Dataset Verification</h3>
+<section id="final-dataset-verification" class="level4">
+<h4 class="anchored" data-anchor-id="final-dataset-verification">5. Final Dataset Verification</h4>
 <p>After completing these steps, we inspected the cleaned dataset to confirm that:</p>
 <ul>
 <li><p>All countries and years were correctly aligned.</p></li>
@@ -6287,12 +6280,12 @@ vertical-align: -.125em;
 <li>Summarize the joined dataset</li>
 </ul>
 </section>
+</section>
 <section id="hypothesis" class="level2">
 <h2 class="anchored" data-anchor-id="hypothesis">Hypothesis</h2>
-<p><strong>TODO</strong>: Hypothesized relationship between the variables (and any outside references). (Haley)</p>
+<p>We hypothesize that there will be a nonlinear relationship between inflation rates and poverty rates in the world. Intuitively, frequent fluctuations in inflation rates will be associated with higher poverty rates, as economic instability disproportionately affects people of lower incomes. Additionally, we hypothesize there will be regional or country-specific patterns because economic structures, government policies, and external factors such as tariffs and diplomatic conflict will effect the relationship between inflation and poverty differs across global regions.</p>
 <!-- -->
 
-</section>
 </section>
 
 </main>
@@ -6824,11 +6817,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Summarze the inflation dataset (Inflation, annual %)</span>
 <span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a><span class="fu"># Data Cleaning Process and Decisions</span></span>
+<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data Cleaning Process</span></span>
 <span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>Data cleaning is a crucial step in ensuring that our analysis is based on accurate and meaningful data. Since the datasets from Gapminder contain economic indicators recorded across multiple years for different countries, we followed a structured cleaning process to prepare our data for analysis. Below, we outline the key steps and the rationale behind each decision.</span>
 <span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a><span class="fu">### Filtering Overlapping Years</span></span>
+<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 1. Filtering Overlapping Years</span></span>
 <span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a>The original datasets contained economic data spanning different time periods, with some variables recorded in years that were not present in the other dataset. To maintain consistency, we filtered both datasets to include only the overlapping years, **1961 to 2023**. This step ensures that we are analyzing the relationship between extreme poverty rates and inflation rates over a common time period without introducing missing values due to mismatched years.</span>
 <span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a></span>
@@ -6843,7 +6836,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a><span class="fu">### Reshaping the Data: Pivoting Longer</span></span>
+<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 2. Reshaping the Data: Pivoting Longer</span></span>
 <span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a>The datasets were structured in a wide format, where each year was a separate column. For ease of analysis and visualization, we transformed them into a long format by pivoting the year columns into a single <span class="in">`year`</span> variable. This conversion was necessary to perform operations like merging datasets and running regression models. We also ensured that the <span class="in">`year`</span> column was treated as a numeric variable rather than a character string, enabling proper chronological analysis.</span>
 <span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a></span>
@@ -6865,7 +6858,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb10-110"><a href="#cb10-110" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-111"><a href="#cb10-111" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb10-112"><a href="#cb10-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-113"><a href="#cb10-113" aria-hidden="true" tabindex="-1"></a><span class="fu">### Merging the Datasets</span></span>
+<span id="cb10-113"><a href="#cb10-113" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 3. Merging the Datasets</span></span>
 <span id="cb10-114"><a href="#cb10-114" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-115"><a href="#cb10-115" aria-hidden="true" tabindex="-1"></a>After reshaping, we joined the two datasets on the common columns: <span class="in">`country`</span> and <span class="in">`year`</span>. Given that some countries may have missing data for either variable, we chose an inner join to retain only the observations that exist in both datasets. This approach minimizes the risk of bias in our analysis by ensuring that each <span class="in">`country-year`</span> pair has both poverty and inflation data available.</span>
 <span id="cb10-116"><a href="#cb10-116" aria-hidden="true" tabindex="-1"></a></span>
@@ -6878,7 +6871,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb10-125"><a href="#cb10-125" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-126"><a href="#cb10-126" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb10-127"><a href="#cb10-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-128"><a href="#cb10-128" aria-hidden="true" tabindex="-1"></a><span class="fu">### Handling Missing Values</span></span>
+<span id="cb10-128"><a href="#cb10-128" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 4. Handling Missing Values</span></span>
 <span id="cb10-129"><a href="#cb10-129" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-130"><a href="#cb10-130" aria-hidden="true" tabindex="-1"></a>Economic data often contains missing values due to reporting inconsistencies or gaps in data collection. To address this, we dropped rows with missing values after merging the datasets. While other imputation techniques (such as mean or median substitution) could have been used, we opted for deletion to maintain the integrity of our statistical analysis and avoid introducing artificial patterns.</span>
 <span id="cb10-131"><a href="#cb10-131" aria-hidden="true" tabindex="-1"></a></span>
@@ -6890,7 +6883,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb10-139"><a href="#cb10-139" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-140"><a href="#cb10-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb10-141"><a href="#cb10-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-142"><a href="#cb10-142" aria-hidden="true" tabindex="-1"></a><span class="fu">### Final Dataset Verification</span></span>
+<span id="cb10-142"><a href="#cb10-142" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 5. Final Dataset Verification</span></span>
 <span id="cb10-143"><a href="#cb10-143" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-144"><a href="#cb10-144" aria-hidden="true" tabindex="-1"></a>After completing these steps, we inspected the cleaned dataset to confirm that:</span>
 <span id="cb10-145"><a href="#cb10-145" aria-hidden="true" tabindex="-1"></a></span>
@@ -6909,9 +6902,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb10-160"><a href="#cb10-160" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-161"><a href="#cb10-161" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Summarize the joined dataset</span>
 <span id="cb10-162"><a href="#cb10-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-163"><a href="#cb10-163" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hypothesis</span></span>
-<span id="cb10-164"><a href="#cb10-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-165"><a href="#cb10-165" aria-hidden="true" tabindex="-1"></a>**TODO**: Hypothesized relationship between the variables (and any outside references). (Haley)</span>
+<span id="cb10-163"><a href="#cb10-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-164"><a href="#cb10-164" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hypothesis</span></span>
+<span id="cb10-165"><a href="#cb10-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-166"><a href="#cb10-166" aria-hidden="true" tabindex="-1"></a>We hypothesize that there will be a nonlinear relationship between inflation rates and poverty rates in the world. Intuitively, frequent fluctuations in inflation rates will be associated with higher poverty rates, as economic instability disproportionately affects people of lower incomes. Additionally, we hypothesize there will be regional or country-specific patterns because economic structures, government policies, and external factors such as tariffs and diplomatic conflict will effect the relationship between inflation and poverty differs across global regions. </span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
