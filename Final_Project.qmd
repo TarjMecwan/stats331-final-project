@@ -57,6 +57,8 @@ head(inflation) |>
 
 -   Summarze the inflation dataset (Inflation, annual %)
 
+The poverty dataset contains information on the poverty rate for countries over time. Each country represents one observation and each column represents one year. The inflation dataset contains information on the inflation rate for countries over time. Similar to the poverty dataset, each country represents one observation and each column represents one year. The poverty dataset contains information on the years 1800 to 2100 while the inflation dataset only contains information on the years 1961 to 2023. Both datasets contain numerous NA values.
+
 ## Data Cleaning Process
 
 Data cleaning is a crucial step in ensuring that our analysis is based on accurate and meaningful data. Since the datasets from Gapminder contain economic indicators recorded across multiple years for different countries, we followed a structured cleaning process to prepare our data for analysis. Below, we outline the key steps and the rationale behind each decision.
@@ -142,7 +144,6 @@ head(poverty_inflation_data) |>
 
 -   Summarize the joined dataset
 
-
 ## Hypothesis
 
-We hypothesize that there will be a nonlinear relationship between inflation rates and poverty rates in the world. Intuitively, frequent fluctuations in inflation rates will be associated with higher poverty rates, as economic instability disproportionately affects people of lower incomes. Additionally, we hypothesize there will be regional or country-specific patterns because economic structures, government policies, and external factors such as tariffs and diplomatic conflict will effect the relationship between inflation and poverty differs across global regions. 
+We hypothesize that there will be a nonlinear relationship between inflation rates and poverty rates in the world. Intuitively, frequent fluctuations in inflation rates will be associated with higher poverty rates, as economic instability disproportionately affects people of lower incomes. Additionally, we hypothesize there will be regional or country-specific patterns because economic structures, government policies, and external factors such as tariffs and diplomatic conflict will effect the relationship between inflation and poverty differs across global regions.
