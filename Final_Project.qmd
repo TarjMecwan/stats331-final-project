@@ -59,7 +59,7 @@ Data cleaning is a crucial step in ensuring that our analysis is based on accura
 
 #### 1. Filtering Overlapping Years
 
-The original datasets contained economic data spanning different time periods, with some variables recorded in years that were not present in the other dataset. To maintain consistency, we filtered both datasets to include only the overlapping years, **1961 to 2023**. This step ensures that we are analyzing the relationship between extreme poverty rates and inflation rates over a common time period without introducing missing values due to mismatched years.
+The original datasets contained economic data spanning different time periods, with some variables recorded in years that were not present in the other dataset. To maintain consistency, we filtered both datasets to include only the overlapping years, 1961 to 2023. This step ensures that we are analyzing the relationship between extreme poverty rates and inflation rates over a common time period without introducing missing values due to mismatched years.
 
 ```{r}
 # Filter the datasets to include only the overlapping years (1961 to 2023)
@@ -171,3 +171,87 @@ The joined dataset contains 10,163 observations and 4 variables: `country` of ty
 ## Hypothesis
 
 We hypothesize that there will be a nonlinear relationship between inflation rates and poverty rates in the world. Intuitively, frequent fluctuations in inflation rates will be associated with higher poverty rates, as economic instability disproportionately affects people of lower incomes. Additionally, we hypothesize there will be regional or country-specific patterns because economic structures, government policies, and external factors such as tariffs and diplomatic conflict will effect the relationship between inflation and poverty differs across global regions.
+
+## Linear Regression
+
+#### Data Visualization
+
+Inflation rates can vary widely, with some countries experiencing very low rates and others experiencing extremely high rates. When we initially plotted the graph directly using the data from the joined data set, the distribution was strongly right-skewed, with most of the points located along the y-axis. As a result, we applied a log transformation to the `inflation_rate` variable to spread out the values more evenly. By applying a log transformation, we compress the range of inflation rates, making it easier to visualize and interpret the relationship between inflation rate and poverty rate.
+
+The scatterplot below shows the relationship between the log-transformed inflation rate and the poverty rate, where each point represents an observation of inflation rate and poverty rate for a country in a year within 1961 to 2023.
+
+```{r}
+#| warning: false
+#| fig-align: center
+#| fig-cap: "Relationship between log-transformed inflation rate and extreme poverty rate from 1961 to 2023."
+
+# Scatter plot of inflation rate vs. poverty rate
+ggplot(data = poverty_inflation_data, 
+       mapping = aes(x = log1p(inflation_rate), 
+                     y = poverty_rate, 
+                     color = as.factor(year))) +
+  geom_point(alpha = 0.5) +
+  scale_color_viridis_d() +
+  labs(
+    title = "Inflation Rate vs. Poverty Rate",
+    subtitle = "Poverty Rate (%)",
+    x = "Log(Inflation Rate + 1)",
+    y = "",
+    color = "Year") +
+  theme_minimal()
+```
+
+The scatter plot of the log-transformed inflation rate versus the poverty rate reveals a concentration of data points around x = 2 on the log-transformed scale. This indicates that many countries have an inflation rate that, when transformed using `log1p`, falls around this value. Specifically, `log1p(7)` is approximately 2, suggesting that a significant number of countries have an inflation rate close to 7%. This implies that moderate inflation rates (around 7%) are common across the dataset. The normally distributed spread of points shows that, even with similar inflation rates, countries can experience a wide range of poverty rates, highlighting the complexity of the relationship between these two variables.
+
+Let's explore how the relationship between inflation rate and poverty rate changes over time. The scatterplot below illustrates the change in relationship between log-transformed average global inflation rate and average global poverty rate from 1961 to 2023, where each point represents the log-transformed average global inflation rate and average global poverty rate for a specific year. As in the graph above, we applied a log transformation to the `inflation_rate` variable to spread out the values for clearer visualization.
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-align: center
+#| fig-cap: "Change in relationship between log-transformed average global inflation rate and average global poverty rate from 1961 to 2023."
+
+# Aggregate data to show average values per year
+aggregated_data <- poverty_inflation_data |>
+  group_by(year) |>
+  summarize(avg_inflation_rate = mean(inflation_rate, na.rm = TRUE),
+            avg_poverty_rate = mean(poverty_rate, na.rm = TRUE))
+
+# Plot of average inflation rate vs. average poverty rate over time
+ggplot(data = aggregated_data, 
+       mapping = aes(x = log1p(avg_inflation_rate), 
+                     y = avg_poverty_rate, 
+                     color = year)) +
+  geom_point(alpha = 0.7, size = 3) +
+  geom_text(aes(label = year), 
+            hjust = 1.5, 
+            vjust = 1.5, 
+            size = 3, 
+            check_overlap = TRUE) +
+  scale_color_viridis_c() +
+  labs(
+    title = "Average Inflation Rate vs. Average Poverty Rate Over Time",
+    subtitle = "Average Poverty Rate (%)",
+    x = "Log(Average Inflation Rate + 1)",
+    y = "",
+    color = "Year") +
+  theme_minimal()
+```
+
+From this graph, we can make the following observations:
+
+-   1961-1980 is characterized by low to moderate average global inflation rates, accompanied by high average global poverty rates. This suggests that despite relatively stable inflation, poverty remained a significant issue globally.
+
+-   1980-2000 had moderate to high average global inflation rates, while average global poverty rates decreased to moderate levels. This indicates a period of economic volatility with higher inflation, with some progress in reducing poverty.
+
+-   2000-2023 shows low to moderate levels of average global inflation, with average global poverty rates further decreasing to low to moderate levels. This suggests improved economic stability and continued progress in poverty reduction.
+
+#### Linear Regression Model
+
+**TODO: Tarj**
+
+#### Evaluating Model Fit
+
+**TODO: Haley**
+
+
