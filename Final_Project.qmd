@@ -117,18 +117,18 @@ poverty_inflation_data <- poverty_inflation_data |>
 
 #### 5. Handling Variable Type Conversions
 
-During our final dataset verification, we discovered that the inflation_rate variable was incorrectly classified as a character type rather than numeric. This was due to formatting inconsistencies, such as:
+During our final data set verification, we discovered that the inflation_rate variable was incorrectly classified as a character type rather than numeric. This was due to formatting inconsistencies from the original data set, such as:
 
 -   The use of non-standard minus signs
--   Some values being recorded with a "k" suffix, indicating thousands.
+-   Some values being recorded with a "k" suffix (indicating thousands)
 
 To correct this, we:
 
-1\. Replaced non-standard minus signs with the standard minus sign.
+1.  Replaced non-standard minus signs with the standard minus sign
 
-2\. Converted "k" suffix values by multiplying them by 1000.
+2.  Converted "k" suffix values by multiplying them by 1000
 
-3\. Ensured all values were stored as numeric to allow for proper analysis.
+3.  Ensured all values were stored as numeric to allow for proper analysis
 
 ```{r}
 #| warning: false

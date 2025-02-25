@@ -6204,15 +6204,17 @@ vertical-align: -.125em;
 </section>
 <section id="handling-variable-type-conversions" class="level4">
 <h4 class="anchored" data-anchor-id="handling-variable-type-conversions">5. Handling Variable Type Conversions</h4>
-<p>During our final dataset verification, we discovered that the inflation_rate variable was incorrectly classified as a character type rather than numeric. This was due to formatting inconsistencies, such as:</p>
+<p>During our final data set verification, we discovered that the inflation_rate variable was incorrectly classified as a character type rather than numeric. This was due to formatting inconsistencies from the original data set, such as:</p>
 <ul>
 <li>The use of non-standard minus signs</li>
-<li>Some values being recorded with a “k” suffix, indicating thousands.</li>
+<li>Some values being recorded with a “k” suffix (indicating thousands)</li>
 </ul>
 <p>To correct this, we:</p>
-<p>1. Replaced non-standard minus signs with the standard minus sign.</p>
-<p>2. Converted “k” suffix values by multiplying them by 1000.</p>
-<p>3. Ensured all values were stored as numeric to allow for proper analysis.</p>
+<ol type="1">
+<li><p>Replaced non-standard minus signs with the standard minus sign</p></li>
+<li><p>Converted “k” suffix values by multiplying them by 1000</p></li>
+<li><p>Ensured all values were stored as numeric to allow for proper analysis</p></li>
+</ol>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -6901,18 +6903,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb12-133"><a href="#cb12-133" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-134"><a href="#cb12-134" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 5. Handling Variable Type Conversions</span></span>
 <span id="cb12-135"><a href="#cb12-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-136"><a href="#cb12-136" aria-hidden="true" tabindex="-1"></a>During our final dataset verification, we discovered that the inflation_rate variable was incorrectly classified as a character type rather than numeric. This was due to formatting inconsistencies, such as:</span>
+<span id="cb12-136"><a href="#cb12-136" aria-hidden="true" tabindex="-1"></a>During our final data set verification, we discovered that the inflation_rate variable was incorrectly classified as a character type rather than numeric. This was due to formatting inconsistencies from the original data set, such as:</span>
 <span id="cb12-137"><a href="#cb12-137" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-138"><a href="#cb12-138" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>The use of non-standard minus signs</span>
-<span id="cb12-139"><a href="#cb12-139" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Some values being recorded with a &quot;k&quot; suffix, indicating thousands.</span>
+<span id="cb12-139"><a href="#cb12-139" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Some values being recorded with a &quot;k&quot; suffix (indicating thousands)</span>
 <span id="cb12-140"><a href="#cb12-140" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-141"><a href="#cb12-141" aria-hidden="true" tabindex="-1"></a>To correct this, we:</span>
 <span id="cb12-142"><a href="#cb12-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-143"><a href="#cb12-143" aria-hidden="true" tabindex="-1"></a>1<span class="sc">\.</span> Replaced non-standard minus signs with the standard minus sign.</span>
+<span id="cb12-143"><a href="#cb12-143" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Replaced non-standard minus signs with the standard minus sign</span>
 <span id="cb12-144"><a href="#cb12-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-145"><a href="#cb12-145" aria-hidden="true" tabindex="-1"></a>2<span class="sc">\.</span> Converted &quot;k&quot; suffix values by multiplying them by 1000.</span>
+<span id="cb12-145"><a href="#cb12-145" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Converted &quot;k&quot; suffix values by multiplying them by 1000</span>
 <span id="cb12-146"><a href="#cb12-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-147"><a href="#cb12-147" aria-hidden="true" tabindex="-1"></a>3<span class="sc">\.</span> Ensured all values were stored as numeric to allow for proper analysis.</span>
+<span id="cb12-147"><a href="#cb12-147" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Ensured all values were stored as numeric to allow for proper analysis</span>
 <span id="cb12-148"><a href="#cb12-148" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-151"><a href="#cb12-151" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb12-152"><a href="#cb12-152" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
