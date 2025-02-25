@@ -6179,7 +6179,7 @@ vertical-align: -.125em;
 </section>
 <section id="merging-the-datasets" class="level4">
 <h4 class="anchored" data-anchor-id="merging-the-datasets">3. Merging the Datasets</h4>
-<p>After reshaping, we joined the two datasets on the common columns: <code>country</code> and <code>year</code>. Given that some countries may have missing data for either variable, we chose an inner join to retain only the observations that exist in both datasets. This approach minimizes the risk of bias in our analysis by ensuring that each <code>country-year</code> pair has both poverty and inflation data available.</p>
+<p>Once the datasets were in long format, we merged them on the common columns: country and year. Given that some countries may have missing data for either variable, we opted for an inner join, which ensures that each country-year pair has both inflation and poverty data available. This decision helps maintain data integrity and prevents bias introduced by missing observations.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -6192,7 +6192,7 @@ vertical-align: -.125em;
 </section>
 <section id="handling-missing-values" class="level4">
 <h4 class="anchored" data-anchor-id="handling-missing-values">4. Handling Missing Values</h4>
-<p>Economic data often contains missing values due to reporting inconsistencies or gaps in data collection. To address this, we dropped rows with missing values after merging the datasets. While other imputation techniques (such as mean or median substitution) could have been used, we opted for deletion to maintain the integrity of our statistical analysis and avoid introducing artificial patterns.</p>
+<p>Economic data often contains missing values due to inconsistencies in reporting across countries and time periods. To address this, we dropped rows with missing values after merging the datasets. While other imputation techniques (such as mean or median substitution) could have been used, we opted for deletion to maintain the accuracy of our statistical analysis and avoid introducing artificial trends.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -6204,9 +6204,15 @@ vertical-align: -.125em;
 </section>
 <section id="handling-variable-type-conversions" class="level4">
 <h4 class="anchored" data-anchor-id="handling-variable-type-conversions">5. Handling Variable Type Conversions</h4>
+<p>During our final dataset verification, we discovered that the inflation_rate variable was incorrectly classified as a character type rather than numeric. This was due to formatting inconsistencies, such as:</p>
 <ul>
-<li>Convert inflation_rate from character to numeric type <strong>TO DO</strong> (Tarj)</li>
+<li>The use of non-standard minus signs</li>
+<li>Some values being recorded with a “k” suffix, indicating thousands.</li>
 </ul>
+<p>To correct this, we:</p>
+<p>1. Replaced non-standard minus signs with the standard minus sign.</p>
+<p>2. Converted “k” suffix values by multiplying them by 1000.</p>
+<p>3. Ensured all values were stored as numeric to allow for proper analysis.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -6829,7 +6835,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
 <span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a>The poverty dataset contains information on the extreme poverty rate, where workers make less than $2.15/day, for countries over time. Each country represents one observation and each column represents one year. The inflation dataset contains information on the inflation rate for countries over time. Similar to the poverty dataset, each country represents one observation and each column represents one year. The poverty dataset contains information on the years 1800 to 2100, while the inflation dataset only contains information on the years 1961 to 2023. Both datasets contain numerous NA values.</span>
+<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a>The poverty dataset contains information on the extreme poverty rate, where workers make less than \$2.15/day, for countries over time. Each country represents one observation and each column represents one year. The inflation dataset contains information on the inflation rate for countries over time. Similar to the poverty dataset, each country represents one observation and each column represents one year. The poverty dataset contains information on the years 1800 to 2100, while the inflation dataset only contains information on the years 1961 to 2023. Both datasets contain numerous NA values.</span>
 <span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data Cleaning Process</span></span>
 <span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a></span>
@@ -6872,7 +6878,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb12-106"><a href="#cb12-106" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-107"><a href="#cb12-107" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 3. Merging the Datasets</span></span>
 <span id="cb12-108"><a href="#cb12-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-109"><a href="#cb12-109" aria-hidden="true" tabindex="-1"></a>After reshaping, we joined the two datasets on the common columns: <span class="in">`country`</span> and <span class="in">`year`</span>. Given that some countries may have missing data for either variable, we chose an inner join to retain only the observations that exist in both datasets. This approach minimizes the risk of bias in our analysis by ensuring that each <span class="in">`country-year`</span> pair has both poverty and inflation data available.</span>
+<span id="cb12-109"><a href="#cb12-109" aria-hidden="true" tabindex="-1"></a>Once the datasets were in long format, we merged them on the common columns: country and year. Given that some countries may have missing data for either variable, we opted for an inner join, which ensures that each country-year pair has both inflation and poverty data available. This decision helps maintain data integrity and prevents bias introduced by missing observations.</span>
 <span id="cb12-110"><a href="#cb12-110" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-113"><a href="#cb12-113" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb12-114"><a href="#cb12-114" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.3 Joining Datasets</span></span>
@@ -6884,7 +6890,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb12-120"><a href="#cb12-120" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-121"><a href="#cb12-121" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 4. Handling Missing Values</span></span>
 <span id="cb12-122"><a href="#cb12-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-123"><a href="#cb12-123" aria-hidden="true" tabindex="-1"></a>Economic data often contains missing values due to reporting inconsistencies or gaps in data collection. To address this, we dropped rows with missing values after merging the datasets. While other imputation techniques (such as mean or median substitution) could have been used, we opted for deletion to maintain the integrity of our statistical analysis and avoid introducing artificial patterns.</span>
+<span id="cb12-123"><a href="#cb12-123" aria-hidden="true" tabindex="-1"></a>Economic data often contains missing values due to inconsistencies in reporting across countries and time periods. To address this, we dropped rows with missing values after merging the datasets. While other imputation techniques (such as mean or median substitution) could have been used, we opted for deletion to maintain the accuracy of our statistical analysis and avoid introducing artificial trends.</span>
 <span id="cb12-124"><a href="#cb12-124" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-127"><a href="#cb12-127" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb12-128"><a href="#cb12-128" aria-hidden="true" tabindex="-1"></a><span class="co"># Handle missing values</span></span>
@@ -6895,53 +6901,62 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb12-133"><a href="#cb12-133" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-134"><a href="#cb12-134" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 5. Handling Variable Type Conversions</span></span>
 <span id="cb12-135"><a href="#cb12-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-136"><a href="#cb12-136" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Convert inflation_rate from character to numeric type</span>
-<span id="cb12-137"><a href="#cb12-137" aria-hidden="true" tabindex="-1"></a>**TO DO** (Tarj)</span>
-<span id="cb12-138"><a href="#cb12-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-141"><a href="#cb12-141" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-142"><a href="#cb12-142" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb12-143"><a href="#cb12-143" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb12-136"><a href="#cb12-136" aria-hidden="true" tabindex="-1"></a>During our final dataset verification, we discovered that the inflation_rate variable was incorrectly classified as a character type rather than numeric. This was due to formatting inconsistencies, such as:</span>
+<span id="cb12-137"><a href="#cb12-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-138"><a href="#cb12-138" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>The use of non-standard minus signs</span>
+<span id="cb12-139"><a href="#cb12-139" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Some values being recorded with a &quot;k&quot; suffix, indicating thousands.</span>
+<span id="cb12-140"><a href="#cb12-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-141"><a href="#cb12-141" aria-hidden="true" tabindex="-1"></a>To correct this, we:</span>
+<span id="cb12-142"><a href="#cb12-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-143"><a href="#cb12-143" aria-hidden="true" tabindex="-1"></a>1<span class="sc">\.</span> Replaced non-standard minus signs with the standard minus sign.</span>
 <span id="cb12-144"><a href="#cb12-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-145"><a href="#cb12-145" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace non-standard minus signs with the standard minus sign</span></span>
-<span id="cb12-146"><a href="#cb12-146" aria-hidden="true" tabindex="-1"></a>poverty_inflation_data <span class="ot">&lt;-</span> poverty_inflation_data <span class="sc">|&gt;</span></span>
-<span id="cb12-147"><a href="#cb12-147" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">inflation_rate =</span> <span class="fu">gsub</span>(<span class="st">&quot;\u2212&quot;</span>, <span class="st">&quot;-&quot;</span>, inflation_rate)) </span>
+<span id="cb12-145"><a href="#cb12-145" aria-hidden="true" tabindex="-1"></a>2<span class="sc">\.</span> Converted &quot;k&quot; suffix values by multiplying them by 1000.</span>
+<span id="cb12-146"><a href="#cb12-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-147"><a href="#cb12-147" aria-hidden="true" tabindex="-1"></a>3<span class="sc">\.</span> Ensured all values were stored as numeric to allow for proper analysis.</span>
 <span id="cb12-148"><a href="#cb12-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-149"><a href="#cb12-149" aria-hidden="true" tabindex="-1"></a><span class="co"># Handle &#39;k&#39; suffix for thousands and convert to numeric</span></span>
-<span id="cb12-150"><a href="#cb12-150" aria-hidden="true" tabindex="-1"></a>poverty_inflation_data <span class="ot">&lt;-</span> poverty_inflation_data <span class="sc">|&gt;</span></span>
-<span id="cb12-151"><a href="#cb12-151" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">inflation_rate =</span> <span class="fu">ifelse</span>(</span>
-<span id="cb12-152"><a href="#cb12-152" aria-hidden="true" tabindex="-1"></a>    <span class="fu">grepl</span>(<span class="st">&quot;k&quot;</span>, inflation_rate, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb12-153"><a href="#cb12-153" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">&quot;k&quot;</span>, <span class="st">&quot;&quot;</span>, inflation_rate, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>)) <span class="sc">*</span> <span class="dv">1000</span>,</span>
-<span id="cb12-154"><a href="#cb12-154" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.numeric</span>(inflation_rate)))</span>
-<span id="cb12-155"><a href="#cb12-155" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-156"><a href="#cb12-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-157"><a href="#cb12-157" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 6. Final Dataset Verification</span></span>
+<span id="cb12-151"><a href="#cb12-151" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-152"><a href="#cb12-152" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb12-153"><a href="#cb12-153" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb12-154"><a href="#cb12-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-155"><a href="#cb12-155" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace non-standard minus signs with the standard minus sign</span></span>
+<span id="cb12-156"><a href="#cb12-156" aria-hidden="true" tabindex="-1"></a>poverty_inflation_data <span class="ot">&lt;-</span> poverty_inflation_data <span class="sc">|&gt;</span></span>
+<span id="cb12-157"><a href="#cb12-157" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">inflation_rate =</span> <span class="fu">gsub</span>(<span class="st">&quot;\u2212&quot;</span>, <span class="st">&quot;-&quot;</span>, inflation_rate)) </span>
 <span id="cb12-158"><a href="#cb12-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-159"><a href="#cb12-159" aria-hidden="true" tabindex="-1"></a>After completing these steps, we inspected the cleaned dataset to confirm that:</span>
-<span id="cb12-160"><a href="#cb12-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-161"><a href="#cb12-161" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>All countries and years were correctly aligned.</span>
-<span id="cb12-162"><a href="#cb12-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-163"><a href="#cb12-163" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>No extraneous variables remained.</span>
-<span id="cb12-164"><a href="#cb12-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-165"><a href="#cb12-165" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>The dataset was free of missing values.</span>
+<span id="cb12-159"><a href="#cb12-159" aria-hidden="true" tabindex="-1"></a><span class="co"># Handle &#39;k&#39; suffix for thousands and convert to numeric</span></span>
+<span id="cb12-160"><a href="#cb12-160" aria-hidden="true" tabindex="-1"></a>poverty_inflation_data <span class="ot">&lt;-</span> poverty_inflation_data <span class="sc">|&gt;</span></span>
+<span id="cb12-161"><a href="#cb12-161" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">inflation_rate =</span> <span class="fu">ifelse</span>(</span>
+<span id="cb12-162"><a href="#cb12-162" aria-hidden="true" tabindex="-1"></a>    <span class="fu">grepl</span>(<span class="st">&quot;k&quot;</span>, inflation_rate, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb12-163"><a href="#cb12-163" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">&quot;k&quot;</span>, <span class="st">&quot;&quot;</span>, inflation_rate, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>)) <span class="sc">*</span> <span class="dv">1000</span>,</span>
+<span id="cb12-164"><a href="#cb12-164" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.numeric</span>(inflation_rate)))</span>
+<span id="cb12-165"><a href="#cb12-165" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb12-166"><a href="#cb12-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-169"><a href="#cb12-169" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-170"><a href="#cb12-170" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(poverty_inflation_data) <span class="sc">|&gt;</span></span>
-<span id="cb12-171"><a href="#cb12-171" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
-<span id="cb12-172"><a href="#cb12-172" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-173"><a href="#cb12-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-174"><a href="#cb12-174" aria-hidden="true" tabindex="-1"></a>Now, we can save the cleaned dataset into a CSV!</span>
-<span id="cb12-175"><a href="#cb12-175" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-178"><a href="#cb12-178" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-179"><a href="#cb12-179" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the cleaned data frame to a CSV</span></span>
-<span id="cb12-180"><a href="#cb12-180" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(poverty_inflation_data, <span class="st">&quot;data/poverty_inflation_data.csv&quot;</span>)</span>
-<span id="cb12-181"><a href="#cb12-181" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-182"><a href="#cb12-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-183"><a href="#cb12-183" aria-hidden="true" tabindex="-1"></a>The joined dataset contains 10,163 observations and 4 variables: <span class="in">`country`</span> of type character, <span class="in">`year`</span> of type numeric, <span class="in">`inflation_rate`</span> of type numeric, and <span class="in">`poverty_rate`</span> of type numeric. Each <span class="in">`country-year`</span> pair represents one observation. The dataset contains the annual inflation and extreme poverty rates for each country from 1961 to 2023.</span>
-<span id="cb12-184"><a href="#cb12-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-167"><a href="#cb12-167" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 6. Final Dataset Verification</span></span>
+<span id="cb12-168"><a href="#cb12-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-169"><a href="#cb12-169" aria-hidden="true" tabindex="-1"></a>After completing these steps, we inspected the cleaned dataset to confirm that:</span>
+<span id="cb12-170"><a href="#cb12-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-171"><a href="#cb12-171" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>All countries and years were correctly aligned.</span>
+<span id="cb12-172"><a href="#cb12-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-173"><a href="#cb12-173" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>No extraneous variables remained.</span>
+<span id="cb12-174"><a href="#cb12-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-175"><a href="#cb12-175" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>The dataset was free of missing values.</span>
+<span id="cb12-176"><a href="#cb12-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-179"><a href="#cb12-179" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-180"><a href="#cb12-180" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(poverty_inflation_data) <span class="sc">|&gt;</span></span>
+<span id="cb12-181"><a href="#cb12-181" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
+<span id="cb12-182"><a href="#cb12-182" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-183"><a href="#cb12-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-184"><a href="#cb12-184" aria-hidden="true" tabindex="-1"></a>Now, we can save the cleaned dataset into a CSV!</span>
 <span id="cb12-185"><a href="#cb12-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-186"><a href="#cb12-186" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hypothesis</span></span>
-<span id="cb12-187"><a href="#cb12-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-188"><a href="#cb12-188" aria-hidden="true" tabindex="-1"></a>We hypothesize that there will be a nonlinear relationship between inflation rates and poverty rates in the world. Intuitively, frequent fluctuations in inflation rates will be associated with higher poverty rates, as economic instability disproportionately affects people of lower incomes. Additionally, we hypothesize there will be regional or country-specific patterns because economic structures, government policies, and external factors such as tariffs and diplomatic conflict will effect the relationship between inflation and poverty differs across global regions.</span>
+<span id="cb12-188"><a href="#cb12-188" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-189"><a href="#cb12-189" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the cleaned data frame to a CSV</span></span>
+<span id="cb12-190"><a href="#cb12-190" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(poverty_inflation_data, <span class="st">&quot;data/poverty_inflation_data.csv&quot;</span>)</span>
+<span id="cb12-191"><a href="#cb12-191" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-192"><a href="#cb12-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-193"><a href="#cb12-193" aria-hidden="true" tabindex="-1"></a>The joined dataset contains 10,163 observations and 4 variables: <span class="in">`country`</span> of type character, <span class="in">`year`</span> of type numeric, <span class="in">`inflation_rate`</span> of type numeric, and <span class="in">`poverty_rate`</span> of type numeric. Each <span class="in">`country-year`</span> pair represents one observation. The dataset contains the annual inflation and extreme poverty rates for each country from 1961 to 2023.</span>
+<span id="cb12-194"><a href="#cb12-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-195"><a href="#cb12-195" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hypothesis</span></span>
+<span id="cb12-196"><a href="#cb12-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-197"><a href="#cb12-197" aria-hidden="true" tabindex="-1"></a>We hypothesize that there will be a nonlinear relationship between inflation rates and poverty rates in the world. Intuitively, frequent fluctuations in inflation rates will be associated with higher poverty rates, as economic instability disproportionately affects people of lower incomes. Additionally, we hypothesize there will be regional or country-specific patterns because economic structures, government policies, and external factors such as tariffs and diplomatic conflict will effect the relationship between inflation and poverty differs across global regions.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
