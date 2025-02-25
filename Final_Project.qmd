@@ -15,20 +15,20 @@ execute:
   warning: false
 ---
 
-## Dependencies
-
-To start, we need to load the `tidyverse` and `knitr` packages into RStudio.
+## Introduction
+In this analysis, we will explore the relationships between extreme poverty rates and inflation rates around the world. We will be using the `Extreme Poverty Rate, less than $2.15/day` and `Inflation, annual %` data sets, downloaded as `poverty.csv` and `inflation.csv` respectively, from [Gapminder](https://www.gapminder.org/data/).
 
 ```{r}
 #| message: false
 
 library(tidyverse)
 library(knitr)
+library(viridis)
 ```
 
-## Datasets
+## The Data
 
-Next, we will read in our datasets!
+To start, we will read in our datasets!
 
 ```{r}
 #| message: false
@@ -76,7 +76,6 @@ poverty_filtered <- poverty |>
 The datasets were structured in a wide format, where each year was a separate column. For ease of analysis and visualization, we transformed them into a long format by pivoting the year columns into a single `year` variable. This conversion was necessary to perform operations like merging datasets and running regression models. We also ensured that the `year` column was treated as a numeric variable rather than a character string, enabling proper chronological analysis.
 
 ```{r}
-# 1.2 Pivoting Longer
 # Pivot the year columns to a single column in both datasets
 inflation_long <- inflation_filtered |>
   pivot_longer(cols = `1961`:`2023`, 
@@ -94,10 +93,9 @@ poverty_long <- poverty_filtered |>
 
 #### 3. Merging the Datasets
 
-Once the datasets were in long format, we merged them on the common columns: country and year. Given that some countries may have missing data for either variable, we opted for an inner join, which ensures that each country-year pair has both inflation and poverty data available. This decision helps maintain data integrity and prevents bias introduced by missing observations.
+Once the datasets were in long format, we merged them on the common columns: `country` and `year`. Given that some countries may have missing data for either variable, we opted for an inner join, which ensures that each `country-year` pair has both inflation and poverty data available. This decision helps maintain data integrity and prevents bias introduced by missing observations.
 
 ```{r}
-# 1.3 Joining Datasets
 # Join the datasets on country and year
 poverty_inflation_data <- inflation_long |>
   inner_join(poverty_long, by = c("country", "year"))
@@ -117,7 +115,7 @@ poverty_inflation_data <- poverty_inflation_data |>
 
 #### 5. Handling Variable Type Conversions
 
-During our final data set verification, we discovered that the inflation_rate variable was incorrectly classified as a character type rather than numeric. This was due to formatting inconsistencies from the original data set, such as:
+During our final data set verification, we discovered that the `inflation_rate` variable was incorrectly classified as a character type rather than numeric. This was due to formatting inconsistencies from the original data set, such as:
 
 -   The use of non-standard minus signs
 -   Some values being recorded with a "k" suffix (indicating thousands)
@@ -150,11 +148,11 @@ poverty_inflation_data <- poverty_inflation_data |>
 
 After completing these steps, we inspected the cleaned dataset to confirm that:
 
--   All countries and years were correctly aligned.
+-   All countries and years were correctly aligned
 
--   No extraneous variables remained.
+-   No extraneous variables remained
 
--   The dataset was free of missing values.
+-   The dataset was free of missing values
 
 ```{r}
 head(poverty_inflation_data) |>
