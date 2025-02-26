@@ -188,16 +188,13 @@ The scatterplot below shows the relationship between the log-transformed inflati
 # Scatter plot of inflation rate vs. poverty rate
 ggplot(data = poverty_inflation_data, 
        mapping = aes(x = log1p(inflation_rate), 
-                     y = poverty_rate, 
-                     color = as.factor(year))) +
-  geom_point(alpha = 0.5) +
-  scale_color_viridis_d() +
+                     y = poverty_rate)) +
+  geom_point(alpha = 0.5, color = "steelblue") +
   labs(
     title = "Inflation Rate vs. Poverty Rate",
     subtitle = "Poverty Rate (%)",
     x = "Log(Inflation Rate + 1)",
-    y = "",
-    color = "Year") +
+    y = "") +
   theme_minimal()
 ```
 
