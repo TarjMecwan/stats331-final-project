@@ -16,6 +16,7 @@ execute:
 ---
 
 ## Introduction
+
 In this analysis, we will explore the relationships between extreme poverty rates and inflation rates around the world. We will be using the `Extreme Poverty Rate, less than $2.15/day` and `Inflation, annual %` data sets, downloaded as `poverty.csv` and `inflation.csv` respectively, from [Gapminder](https://www.gapminder.org/data/).
 
 ```{r}
@@ -243,12 +244,64 @@ From this graph, we can make the following observations:
 
 -   2000-2023 shows low to moderate levels of average global inflation, with average global poverty rates further decreasing to low to moderate levels. This suggests improved economic stability and continued progress in poverty reduction.
 
-#### Linear Regression Model
+## 2.2 Linear Regression Model
 
-**TODO: Tarj**
+To analyze the relationship between **inflation rate** and **extreme poverty rate**, we applied a **simple linear regression model**. Since inflation rates are highly skewed, we used a **log transformation** (`log1p(inflation_rate)`) to make the relationship more linear.
+
+The regression equation is:
+
+$$
+\hat{Y} = \beta_0 + \beta_1 \cdot \log(1 + X) + \epsilon
+$$
+
+where:
+
+\- $\hat{Y}$ = Predicted poverty rate
+
+\- $X$ = Inflation rate
+
+\- $\beta_0$ = Intercept (poverty rate when inflation is very low)
+
+\- $\beta_1$ = Slope (expected change in poverty rate for a one-unit increase in log-transformed inflation)
+
+\- $\epsilon$ = Error term
+
+```{r}
+# Removing NA values to prevent errors
+clean_data <- poverty_inflation_data |>
+  filter(!is.na(inflation_rate) & !is.na(poverty_rate)) |>
+  filter(is.finite(log1p(inflation_rate)))
+
+# Fit linear regression model
+linear_model <- lm(poverty_rate ~ log1p(inflation_rate), data = clean_data)
+
+# Display regression summary
+summary(linear_model)
+
+# Extract regression coefficients and R² value
+intercept <- coef(linear_model)[1]   # β0 (Intercept)
+slope <- coef(linear_model)[2]       # β1 (Slope for log-transformed inflation rate)
+r_squared <- summary(linear_model)$r.squared
+
+# Print results
+cat("Intercept (β0):", intercept, "\n")
+cat("Slope (β1):", slope, "\n")
+cat("R-squared:", r_squared, "\n")
+
+# Visualizing the Regression Line
+ggplot(data = clean_data, 
+       aes(x = log1p(inflation_rate), y = poverty_rate)) +
+  geom_point(alpha = 0.5, color = "steelblue") +
+  geom_smooth(method = "lm", color = "red", se = FALSE) +
+  labs(
+    title = "Linear Regression: Log(Inflation Rate) vs. Poverty Rate",
+    x = "Log(Inflation Rate + 1)",
+    y = "Poverty Rate (%)"
+  ) +
+  theme_minimal()
+
+```
 
 #### Evaluating Model Fit
 
 **TODO: Haley**
-
-
