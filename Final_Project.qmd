@@ -15,7 +15,7 @@ execute:
   warning: false
 ---
 
-## Introduction
+# Introduction
 
 In this analysis, we will explore the relationships between extreme poverty rates and inflation rates around the world. We will be using the `Extreme Poverty Rate, less than $2.15/day` and `Inflation, annual %` data sets, downloaded as `poverty.csv` and `inflation.csv` respectively, from [Gapminder](https://www.gapminder.org/data/).
 
@@ -25,9 +25,10 @@ In this analysis, we will explore the relationships between extreme poverty rate
 library(tidyverse)
 library(knitr)
 library(viridis)
+library(kableExtra)
 ```
 
-## The Data
+# The Data
 
 To start, we will read in our datasets!
 
@@ -54,11 +55,11 @@ head(inflation) |>
 
 The poverty dataset contains information on the extreme poverty rate, where workers make less than \$2.15/day, for countries over time. Each country represents one observation and each column represents one year. The inflation dataset contains information on the inflation rate for countries over time. Similar to the poverty dataset, each country represents one observation and each column represents one year. The poverty dataset contains information on the years 1800 to 2100, while the inflation dataset only contains information on the years 1961 to 2023. Both datasets contain numerous NA values.
 
-## Data Cleaning Process
+# Data Cleaning Process
 
 Data cleaning is a crucial step in ensuring that our analysis is based on accurate and meaningful data. Since the datasets from Gapminder contain economic indicators recorded across multiple years for different countries, we followed a structured cleaning process to prepare our data for analysis. Below, we outline the key steps and the rationale behind each decision.
 
-#### 1. Filtering Overlapping Years
+## 1. Filtering Overlapping Years
 
 The original datasets contained economic data spanning different time periods, with some variables recorded in years that were not present in the other dataset. To maintain consistency, we filtered both datasets to include only the overlapping years, 1961 to 2023. This step ensures that we are analyzing the relationship between extreme poverty rates and inflation rates over a common time period without introducing missing values due to mismatched years.
 
@@ -72,7 +73,7 @@ poverty_filtered <- poverty |>
 
 ```
 
-#### 2. Reshaping the Data: Pivoting Longer
+## 2. Reshaping the Data: Pivoting Longer
 
 The datasets were structured in a wide format, where each year was a separate column. For ease of analysis and visualization, we transformed them into a long format by pivoting the year columns into a single `year` variable. This conversion was necessary to perform operations like merging datasets and running regression models. We also ensured that the `year` column was treated as a numeric variable rather than a character string, enabling proper chronological analysis.
 
@@ -92,7 +93,7 @@ poverty_long <- poverty_filtered |>
 
 ```
 
-#### 3. Merging the Datasets
+## 3. Merging the Datasets
 
 Once the datasets were in long format, we merged them on the common columns: `country` and `year`. Given that some countries may have missing data for either variable, we opted for an inner join, which ensures that each `country-year` pair has both inflation and poverty data available. This decision helps maintain data integrity and prevents bias introduced by missing observations.
 
@@ -103,7 +104,7 @@ poverty_inflation_data <- inflation_long |>
 
 ```
 
-#### 4. Handling Missing Values
+## 4. Handling Missing Values
 
 Economic data often contains missing values due to inconsistencies in reporting across countries and time periods. To address this, we dropped rows with missing values after merging the datasets. While other imputation techniques (such as mean or median substitution) could have been used, we opted for deletion to maintain the accuracy of our statistical analysis and avoid introducing artificial trends.
 
@@ -114,7 +115,7 @@ poverty_inflation_data <- poverty_inflation_data |>
 
 ```
 
-#### 5. Handling Variable Type Conversions
+## 5. Handling Variable Type Conversions
 
 During our final data set verification, we discovered that the `inflation_rate` variable was incorrectly classified as a character type rather than numeric. This was due to formatting inconsistencies from the original data set, such as:
 
@@ -145,7 +146,7 @@ poverty_inflation_data <- poverty_inflation_data |>
     as.numeric(inflation_rate)))
 ```
 
-#### 6. Final Dataset Verification
+## 6. Final Dataset Verification
 
 After completing these steps, we inspected the cleaned dataset to confirm that:
 
@@ -169,13 +170,13 @@ write_csv(poverty_inflation_data, "data/poverty_inflation_data.csv")
 
 The joined dataset contains 10,163 observations and 4 variables: `country` of type character, `year` of type numeric, `inflation_rate` of type numeric, and `poverty_rate` of type numeric. Each `country-year` pair represents one observation. The dataset contains the annual inflation and extreme poverty rates for each country from 1961 to 2023.
 
-## Hypothesis
+# Hypothesis
 
 We hypothesize that there will be a nonlinear relationship between inflation rates and poverty rates in the world. Intuitively, frequent fluctuations in inflation rates will be associated with higher poverty rates, as economic instability disproportionately affects people of lower incomes. Additionally, we hypothesize there will be regional or country-specific patterns because economic structures, government policies, and external factors such as tariffs and diplomatic conflict will effect the relationship between inflation and poverty differs across global regions.
 
-## Linear Regression
+# Linear Regression
 
-#### Data Visualization
+## Data Visualization
 
 Inflation rates can vary widely, with some countries experiencing very low rates and others experiencing extremely high rates. When we initially plotted the graph directly using the data from the joined data set, the distribution was strongly right-skewed, with most of the points located along the y-axis. As a result, we applied a log transformation to the `inflation_rate` variable to spread out the values more evenly. By applying a log transformation, we compress the range of inflation rates, making it easier to visualize and interpret the relationship between inflation rate and poverty rate.
 
@@ -244,9 +245,7 @@ From this graph, we can make the following observations:
 
 -   2000-2023 shows low to moderate levels of average global inflation, with average global poverty rates further decreasing to low to moderate levels. This suggests improved economic stability and continued progress in poverty reduction.
 
-## 2.2 Linear Regression Model
-
-### Defining Variables
+## Linear Regression Model
 
 To explore the relationship between **inflation rate** and **extreme poverty rate**, we define:
 
@@ -261,39 +260,55 @@ $$
 \hat{Y} = \beta_0 + \beta_1 \cdot \log(1 + X) + \epsilon
 $$
 
-where:\
-- $\hat{Y}$ = Predicted poverty rate\
-- $X$ = Log-transformed inflation rate\
-- $\beta_0$ = Intercept (poverty rate when inflation is near zero)\
-- $\beta_1$ = Slope (expected change in poverty rate for a one-unit increase in log-transformed inflation)\
-- $\epsilon$ = Error term
+where:
 
-### Data Summarization & Cleaning
+-   $\hat{Y}$ = Predicted poverty rate
 
-To ensure accurate regression results, we: 1. **Filtered out missing values** (`NA`) from both inflation and poverty rates. 2. **Ensured no infinite values** existed after transformation. 3. **Averaged data over all years for each country**, creating a dataset where each country is a single observation.\
-- This helps reduce yearly fluctuations and provides a clearer long-term trend.
+-   $X$ = Log-transformed inflation rate
+
+-   $\beta_0$ = Intercept (poverty rate when inflation is near zero)
+
+-   $\beta_1$ = Slope (expected change in poverty rate for a one-unit increase in log-transformed inflation)
+
+-   $\epsilon$ = Error term
+
+To ensure accurate regression results, we ensured that no infinite values existed after applying the log transformation, averaged the data over all years for each country, and filtered out missing average inflation and average poverty rates to create a cleaned data set where each country is a single observation. By having one `x` value and one `y` value per country, that is, one inflation rate and one extreme poverty rate per country, we can reduce yearly fluctuations and provide a clearer long-term trend.
 
 ```{r}
+#| warning: false
+
+# Clean the dataset to only include one inflation rate and one extreme poverty rate per country
 clean_data <- poverty_inflation_data |>
-  filter(!is.na(inflation_rate) & !is.na(poverty_rate)) |>
   filter(is.finite(log1p(inflation_rate))) |>
   group_by(country) |>
   summarize(
     avg_inflation_rate = mean(inflation_rate, na.rm = TRUE),
     avg_poverty_rate = mean(poverty_rate, na.rm = TRUE)
-  )
+  ) |>
+  filter(!is.na(avg_inflation_rate) & !is.na(avg_poverty_rate))
+
+# Fit the linear regression model
 linear_model <- lm(avg_poverty_rate ~ log1p(avg_inflation_rate), data = clean_data)
+
 model_summary <- summary(linear_model)
 intercept <- coef(linear_model)[1]
 slope <- coef(linear_model)[2]
 r_squared <- model_summary$r.squared
-regression_results <- tibble::tibble(
-  Term = c("Intercept (β0)", "Slope (β1)", "R-squared"),
-  Value = c(intercept, slope, r_squared)
-)
-knitr::kable(regression_results, digits = 4, caption = "Linear Regression Summary")
+
+regression_results <- enframe(c(intercept, slope, r_squared), 
+                              name = "Term", 
+                              value = "Value") |>
+  mutate(Term = c("Intercept (β0)", "Slope (β1)", "R-squared"))
+
+regression_results |>
+  kbl(col.names = c("Term", "Value")) |>
+  add_header_above(c("Linear Regression Summary" = 2), bold = TRUE, font_size = 20) |>
+  row_spec(0, bold = TRUE, font_size = 14, extra_css = "text-align: center;") |>
+  column_spec(1:2, extra_css = "text-align: center;") |>
+  kable_styling(font_size = 12, 
+                full_width = FALSE)
 ```
 
-#### Evaluating Model Fit
+## Evaluating Model Fit
 
 **TODO: Haley**
