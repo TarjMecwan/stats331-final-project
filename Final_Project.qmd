@@ -246,7 +246,14 @@ From this graph, we can make the following observations:
 
 ## 2.2 Linear Regression Model
 
-To analyze the relationship between **inflation rate** and **extreme poverty rate**, we applied a **simple linear regression model**. Since inflation rates are highly skewed, we used a **log transformation** (`log1p(inflation_rate)`) to make the relationship more linear.
+### Defining Variables
+
+To explore the relationship between **inflation rate** and **extreme poverty rate**, we define:
+
+-   **Explanatory Variable (X)**: Inflation rate (`inflation_rate`)\
+-   **Response Variable (Y)**: Extreme poverty rate (`poverty_rate`)
+
+Since inflation rates are highly skewed, we apply a **log transformation** (`log1p(inflation_rate)`) to make the relationship more linear.
 
 The regression equation is:
 
@@ -254,52 +261,37 @@ $$
 \hat{Y} = \beta_0 + \beta_1 \cdot \log(1 + X) + \epsilon
 $$
 
-where:
+where:\
+- $\hat{Y}$ = Predicted poverty rate\
+- $X$ = Log-transformed inflation rate\
+- $\beta_0$ = Intercept (poverty rate when inflation is near zero)\
+- $\beta_1$ = Slope (expected change in poverty rate for a one-unit increase in log-transformed inflation)\
+- $\epsilon$ = Error term
 
-\- $\hat{Y}$ = Predicted poverty rate
+### Data Summarization & Cleaning
 
-\- $X$ = Inflation rate
-
-\- $\beta_0$ = Intercept (poverty rate when inflation is very low)
-
-\- $\beta_1$ = Slope (expected change in poverty rate for a one-unit increase in log-transformed inflation)
-
-\- $\epsilon$ = Error term
+To ensure accurate regression results, we: 1. **Filtered out missing values** (`NA`) from both inflation and poverty rates. 2. **Ensured no infinite values** existed after transformation. 3. **Averaged data over all years for each country**, creating a dataset where each country is a single observation.\
+- This helps reduce yearly fluctuations and provides a clearer long-term trend.
 
 ```{r}
-# Removing NA values to prevent errors
 clean_data <- poverty_inflation_data |>
   filter(!is.na(inflation_rate) & !is.na(poverty_rate)) |>
-  filter(is.finite(log1p(inflation_rate)))
-
-# Fit linear regression model
-linear_model <- lm(poverty_rate ~ log1p(inflation_rate), data = clean_data)
-
-# Display regression summary
-summary(linear_model)
-
-# Extract regression coefficients and R² value
-intercept <- coef(linear_model)[1]   # β0 (Intercept)
-slope <- coef(linear_model)[2]       # β1 (Slope for log-transformed inflation rate)
-r_squared <- summary(linear_model)$r.squared
-
-# Print results
-cat("Intercept (β0):", intercept, "\n")
-cat("Slope (β1):", slope, "\n")
-cat("R-squared:", r_squared, "\n")
-
-# Visualizing the Regression Line
-ggplot(data = clean_data, 
-       aes(x = log1p(inflation_rate), y = poverty_rate)) +
-  geom_point(alpha = 0.5, color = "steelblue") +
-  geom_smooth(method = "lm", color = "red", se = FALSE) +
-  labs(
-    title = "Linear Regression: Log(Inflation Rate) vs. Poverty Rate",
-    x = "Log(Inflation Rate + 1)",
-    y = "Poverty Rate (%)"
-  ) +
-  theme_minimal()
-
+  filter(is.finite(log1p(inflation_rate))) |>
+  group_by(country) |>
+  summarize(
+    avg_inflation_rate = mean(inflation_rate, na.rm = TRUE),
+    avg_poverty_rate = mean(poverty_rate, na.rm = TRUE)
+  )
+linear_model <- lm(avg_poverty_rate ~ log1p(avg_inflation_rate), data = clean_data)
+model_summary <- summary(linear_model)
+intercept <- coef(linear_model)[1]
+slope <- coef(linear_model)[2]
+r_squared <- model_summary$r.squared
+regression_results <- tibble::tibble(
+  Term = c("Intercept (β0)", "Slope (β1)", "R-squared"),
+  Value = c(intercept, slope, r_squared)
+)
+knitr::kable(regression_results, digits = 4, caption = "Linear Regression Summary")
 ```
 
 #### Evaluating Model Fit
