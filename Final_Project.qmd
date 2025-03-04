@@ -272,6 +272,10 @@ where:
 
 -   $\epsilon$ = Error term
 
+The intercept represents the predicted extreme poverty rate when the inflation rate is close to zero. If intercept is high, it suggests that even in countries with minimal inflation, extreme poverty persists, indicating that other socioeconomic factors play a role in poverty levels. This baseline provides insight into poverty conditions in relatively stable economies.
+
+The slope represents the expected change in the extreme poverty rate for a one-unit increase in the log-transformed inflation rate. A positive slope suggests that higher inflation is associated with increased poverty, likely due to rising costs of living and reduced purchasing power. Conversely, a negative slope would indicate that higher inflation correlates with lower poverty, possibly reflecting economic growth in certain regions.
+
 To ensure accurate regression results, we ensured that no infinite values existed after applying the log transformation, averaged the data over all years for each country, and filtered out missing average inflation and average poverty rates to create a cleaned data set where each country is a single observation. By having one `x` value and one `y` value per country, that is, one inflation rate and one extreme poverty rate per country, we can reduce yearly fluctuations and provide a clearer long-term trend.
 
 ```{r}
