@@ -3749,16 +3749,27 @@ Linear Regression Summary
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>variance_table <span class="sc">|&gt;</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="st">&quot;html&quot;</span>, <span class="at">caption =</span> <span class="st">&quot;Variance Components in Regression Model&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>, <span class="st">&quot;condensed&quot;</span>), <span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Metric&quot;</span>, <span class="st">&quot;Variance&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot;Variance Components in Regression Model&quot;</span> <span class="ot">=</span> <span class="dv">2</span>), <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">font_size =</span> <span class="dv">20</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">font_size =</span> <span class="dv">14</span>, <span class="at">extra_css =</span> <span class="st">&quot;text-align: center;&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">extra_css =</span> <span class="st">&quot;text-align: center;&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">12</span>, <span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<table class="table table-striped table-hover table-condensed caption-top table-sm small" data-quarto-postprocess="true">
-<caption>Variance Components in Regression Model</caption>
+<table class="table caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th">Metric</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Variance</th>
+<th colspan="2" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px; font-weight: bold; font-size: 20px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Variance Components in Regression Model
+</div></th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" style="text-align: left; font-weight: bold; font-size: 14px;">Metric</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold; font-size: 14px;">Variance</th>
 </tr>
 </thead>
 <tbody>
@@ -3780,8 +3791,7 @@ Linear Regression Summary
 
 </div>
 </div>
-<p>After assessing our model, we can see that from our <span class="math inline">\(R^2\)</span> = 0.0407, that our model only explains about 4.07% of the variance in poverty rate. We can also see that our residual variance is very high, which tells us that much of the variability in poverty rate is left unexplained by inflation. We can conclude that, although there may be some relationship between inflation and poverty rate, inflation alone is not a strong predictor of poverty rate.</p>
-<p>Though this may seem discouraging, this is still helpful in our analysis. It is important to note here that we are simply exploring the relationship between inflation rate and poverty rate. Inflation being a poor predictor of poverty rate is still helpful in our analysis!</p>
+<p>We observe from our <span class="math inline">\(R^2\)</span> = 0.0407, that our model only explains about 4.07% of the variance in poverty rate. We can also see that our residual variance is very high, which tells us that much of the variability in poverty rate is left unexplained by inflation. We can conclude that, although there may be some relationship between inflation and poverty rate, inflation alone is not a strong predictor of poverty rate. Therefore, the quality of our model is not very high, as we’ve discovered that inflation is a poor predictor of poverty rate.</p>
 </section>
 </section>
 <section id="references" class="level1">
@@ -4502,8 +4512,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb9-247"><a href="#cb9-247" aria-hidden="true" tabindex="-1"></a>After running a linear regression model, we are interested in accessing how much variability our model accounted for in the response values. We are essentially measuring our model&#39;s success with variance. </span>
 <span id="cb9-248"><a href="#cb9-248" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-249"><a href="#cb9-249" aria-hidden="true" tabindex="-1"></a>We begin with accessing variance in our fitted values, as it represents the amount of variablity in the response that was accounted for by our regression model. The variance in our response variables is the total variability in poverty rates, while the variance in residuals is the unexplained error, or variability.  </span>
-<span id="cb9-252"><a href="#cb9-252" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-253"><a href="#cb9-253" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb9-250"><a href="#cb9-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-253"><a href="#cb9-253" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb9-254"><a href="#cb9-254" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate variance components</span></span>
 <span id="cb9-255"><a href="#cb9-255" aria-hidden="true" tabindex="-1"></a>var_response <span class="ot">&lt;-</span> <span class="fu">var</span>(clean_data<span class="sc">$</span>avg_poverty_rate)</span>
 <span id="cb9-256"><a href="#cb9-256" aria-hidden="true" tabindex="-1"></a>var_fitted <span class="ot">&lt;-</span> <span class="fu">var</span>(<span class="fu">fitted</span>(linear_model))</span>
@@ -4516,22 +4526,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb9-263"><a href="#cb9-263" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb9-264"><a href="#cb9-264" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-265"><a href="#cb9-265" aria-hidden="true" tabindex="-1"></a>variance_table <span class="sc">|&gt;</span></span>
-<span id="cb9-266"><a href="#cb9-266" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="st">&quot;html&quot;</span>, <span class="at">caption =</span> <span class="st">&quot;Variance Components in Regression Model&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-267"><a href="#cb9-267" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>, <span class="st">&quot;condensed&quot;</span>), <span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb9-268"><a href="#cb9-268" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-269"><a href="#cb9-269" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-270"><a href="#cb9-270" aria-hidden="true" tabindex="-1"></a>After assessing our model, we can see that from our $R^2$ = 0.0407, that our model only explains about 4.07% of the variance in poverty rate. We can also see that our residual variance is very high, which tells us that much of the variability in poverty rate is left unexplained by inflation. We can conclude that, although there may be some relationship between inflation and poverty rate, inflation alone is not a strong predictor of poverty rate. </span>
-<span id="cb9-271"><a href="#cb9-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-272"><a href="#cb9-272" aria-hidden="true" tabindex="-1"></a>Though this may seem discouraging, this is still helpful in our analysis. It is important to note here that we are simply exploring the relationship between inflation rate and poverty rate. Inflation being a poor predictor of poverty rate is still helpful in our analysis!  </span>
-<span id="cb9-273"><a href="#cb9-273" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-266"><a href="#cb9-266" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Metric&quot;</span>, <span class="st">&quot;Variance&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb9-267"><a href="#cb9-267" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot;Variance Components in Regression Model&quot;</span> <span class="ot">=</span> <span class="dv">2</span>), <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">font_size =</span> <span class="dv">20</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-268"><a href="#cb9-268" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">font_size =</span> <span class="dv">14</span>, <span class="at">extra_css =</span> <span class="st">&quot;text-align: center;&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-269"><a href="#cb9-269" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">extra_css =</span> <span class="st">&quot;text-align: center;&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-270"><a href="#cb9-270" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">12</span>, <span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-271"><a href="#cb9-271" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-272"><a href="#cb9-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-273"><a href="#cb9-273" aria-hidden="true" tabindex="-1"></a>We observe from our $R^2$ = 0.0407, that our model only explains about 4.07% of the variance in poverty rate. We can also see that our residual variance is very high, which tells us that much of the variability in poverty rate is left unexplained by inflation. We can conclude that, although there may be some relationship between inflation and poverty rate, inflation alone is not a strong predictor of poverty rate. Therefore, the quality of our model is not very high, as we&#39;ve discovered that inflation is a poor predictor of poverty rate.</span>
 <span id="cb9-274"><a href="#cb9-274" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-275"><a href="#cb9-275" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
-<span id="cb9-276"><a href="#cb9-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-277"><a href="#cb9-277" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span><span class="co">[</span><span class="ot">Poverty and Inequality Platform (PIP) of The World Bank</span><span class="co">](https://pip.worldbank.org/home)</span></span>
-<span id="cb9-278"><a href="#cb9-278" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span><span class="co">[</span><span class="ot">World Bank Group</span><span class="co">](https://data.worldbank.org/indicator/NY.GDP.DEFL.KD.ZG)</span></span>
-<span id="cb9-279"><a href="#cb9-279" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span><span class="co">[</span><span class="ot">Gapminder</span><span class="co">](https://www.gapminder.org/data/)</span></span>
-<span id="cb9-280"><a href="#cb9-280" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span><span class="co">[</span><span class="ot">Extreme Poverty data documentation</span><span class="co">](https://www.gapminder.org/data/documentation/epovrate/)</span></span>
-<span id="cb9-281"><a href="#cb9-281" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span><span class="co">[</span><span class="ot">Organisation for Economic Co-operation and Development (OECD)</span><span class="co">]</span>(https://www.oecd.org/en/data/indicators/nominal-gross-domestic-product-gdp.html#:~:text=Gross%20domestic%20product%20(GDP)%20is,country%20during%20a%20certain%20period.)</span>
+<span id="cb9-275"><a href="#cb9-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-276"><a href="#cb9-276" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
+<span id="cb9-277"><a href="#cb9-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-278"><a href="#cb9-278" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span><span class="co">[</span><span class="ot">Poverty and Inequality Platform (PIP) of The World Bank</span><span class="co">](https://pip.worldbank.org/home)</span></span>
+<span id="cb9-279"><a href="#cb9-279" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span><span class="co">[</span><span class="ot">World Bank Group</span><span class="co">](https://data.worldbank.org/indicator/NY.GDP.DEFL.KD.ZG)</span></span>
+<span id="cb9-280"><a href="#cb9-280" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span><span class="co">[</span><span class="ot">Gapminder</span><span class="co">](https://www.gapminder.org/data/)</span></span>
+<span id="cb9-281"><a href="#cb9-281" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span><span class="co">[</span><span class="ot">Extreme Poverty data documentation</span><span class="co">](https://www.gapminder.org/data/documentation/epovrate/)</span></span>
+<span id="cb9-282"><a href="#cb9-282" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span><span class="co">[</span><span class="ot">Organisation for Economic Co-operation and Development (OECD)</span><span class="co">]</span>(https://www.oecd.org/en/data/indicators/nominal-gross-domestic-product-gdp.html#:~:text=Gross%20domestic%20product%20(GDP)%20is,country%20during%20a%20certain%20period.)</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

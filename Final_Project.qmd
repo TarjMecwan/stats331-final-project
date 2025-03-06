@@ -233,8 +233,8 @@ regression_results |>
 After running a linear regression model, we are interested in accessing how much variability our model accounted for in the response values. We are essentially measuring our model's success with variance. 
 
 We begin with accessing variance in our fitted values, as it represents the amount of variablity in the response that was accounted for by our regression model. The variance in our response variables is the total variability in poverty rates, while the variance in residuals is the unexplained error, or variability.  
+
 ```{r}
-#| code-fold: true
 # Calculate variance components
 var_response <- var(clean_data$avg_poverty_rate)
 var_fitted <- var(fitted(linear_model))
@@ -247,13 +247,14 @@ variance_table <- data.frame(
 )
 
 variance_table |>
-  kable("html", caption = "Variance Components in Regression Model") |>
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE)
-
+  kbl(col.names = c("Metric", "Variance")) |>
+  add_header_above(c("Variance Components in Regression Model" = 2), bold = TRUE, font_size = 20) |>
+  row_spec(0, bold = TRUE, font_size = 14, extra_css = "text-align: center;") |>
+  column_spec(1:2, extra_css = "text-align: center;") |>
+  kable_styling(font_size = 12, full_width = FALSE)
 ```
-After assessing our model, we can see that from our $R^2$ = 0.0407, that our model only explains about 4.07% of the variance in poverty rate. We can also see that our residual variance is very high, which tells us that much of the variability in poverty rate is left unexplained by inflation. We can conclude that, although there may be some relationship between inflation and poverty rate, inflation alone is not a strong predictor of poverty rate. 
 
-Though this may seem discouraging, this is still helpful in our analysis. It is important to note here that we are simply exploring the relationship between inflation rate and poverty rate. Inflation being a poor predictor of poverty rate is still helpful in our analysis!  
+We observe from our $R^2$ = 0.0407, that our model only explains about 4.07% of the variance in poverty rate. We can also see that our residual variance is very high, which tells us that much of the variability in poverty rate is left unexplained by inflation. We can conclude that, although there may be some relationship between inflation and poverty rate, inflation alone is not a strong predictor of poverty rate. Therefore, the quality of our model is not very high, as we've discovered that inflation is a poor predictor of poverty rate.
 
 
 # References
