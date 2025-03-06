@@ -168,7 +168,7 @@ From this graph, we observe that 1961-1980 is characterized by low to moderate a
 
 ## Linear Regression Model
 
-To explore the relationship between inflation rate and extreme poverty rate, we define the explanatory variable (X) to be the inflation rate and the response variable (Y) to be the poverty rate. Since inflation rates are highly skewed, we apply a log transformation to make the relationship more linear.
+To explore the relationship between inflation rate and extreme poverty rate, we fit the variables to a linear regression model that captures polynomial (nonlinear) relationships. We define the explanatory variable (X) to be the inflation rate and the response variable (Y) to be the poverty rate. 
 
 The regression equation is:
 
@@ -188,18 +188,16 @@ where:
 
 -   $\epsilon$ = Error term
 
-The intercept represents the predicted extreme poverty rate when the inflation rate is close to zero. If intercept is high, it suggests that even in countries with minimal inflation, extreme poverty persists, indicating that other socioeconomic factors play a role in poverty levels. This baseline provides insight into poverty conditions in relatively stable economies.
+The intercept represents the predicted extreme poverty rate when the inflation rate is close to zero. If the intercept is high, it suggests that even in countries with minimal inflation, extreme poverty persists, indicating that other socioeconomic factors play a role in poverty levels. This baseline provides insight into poverty conditions in relatively stable economies. The slope represents the expected change in the extreme poverty rate for a one-unit increase in the log-transformed inflation rate. A positive slope suggests that higher inflation is associated with increased poverty, likely due to rising costs of living and reduced purchasing power. Conversely, a negative slope would indicate that higher inflation correlates with lower poverty, possibly reflecting economic growth in certain regions.
 
-The slope represents the expected change in the extreme poverty rate for a one-unit increase in the log-transformed inflation rate. A positive slope suggests that higher inflation is associated with increased poverty, likely due to rising costs of living and reduced purchasing power. Conversely, a negative slope would indicate that higher inflation correlates with lower poverty, possibly reflecting economic growth in certain regions.
-
-To ensure accurate regression results, we ensured that no infinite values existed after applying the log transformation, averaged the data over all years for each country, and filtered out missing average inflation and average poverty rates to create a cleaned data set where each country is a single observation. By having one `x` value and one `y` value per country, that is, one inflation rate and one extreme poverty rate per country, we can reduce yearly fluctuations and provide a clearer long-term trend.
+To ensure accurate regression results, we averaged the inflation and poverty rates over all years for each country and filtered out missing data to create a cleaned data set where each country is a single observation. By having one inflation rate and one extreme poverty rate per country, we can reduce yearly fluctuations and provide a clearer long-term trend.
 
 ```{r}
 #| warning: false
 
 # Clean the dataset to only include one inflation rate and one extreme poverty rate per country
 clean_data <- poverty_inflation_data |>
-  filter(is.finite(log1p(inflation_rate))) |>
+  filter(is.finite(inflation_rate) & is.finite(poverty_rate)) |>
   group_by(country) |>
   summarize(
     avg_inflation_rate = mean(inflation_rate, na.rm = TRUE),
@@ -207,8 +205,8 @@ clean_data <- poverty_inflation_data |>
   ) |>
   filter(!is.na(avg_inflation_rate) & !is.na(avg_poverty_rate))
 
-# Fit the linear regression model
-linear_model <- lm(avg_poverty_rate ~ log1p(avg_inflation_rate), data = clean_data)
+# Fit the linear regression model with polynomial terms
+linear_model <- lm(avg_poverty_rate ~ poly(avg_inflation_rate, 2), data = clean_data)
 
 model_summary <- summary(linear_model)
 intercept <- coef(linear_model)[1]
@@ -228,6 +226,7 @@ regression_results |>
   kable_styling(font_size = 12, 
                 full_width = FALSE)
 ```
+
 
 ## Evaluating Model Fit
 

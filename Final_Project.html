@@ -3644,7 +3644,7 @@ window.Quarto = {
 </section>
 <section id="linear-regression-model" class="level2">
 <h2 class="anchored" data-anchor-id="linear-regression-model">Linear Regression Model</h2>
-<p>To explore the relationship between inflation rate and extreme poverty rate, we define the explanatory variable (X) to be the inflation rate and the response variable (Y) to be the poverty rate. Since inflation rates are highly skewed, we apply a log transformation to make the relationship more linear.</p>
+<p>To explore the relationship between inflation rate and extreme poverty rate, we fit the variables to a linear regression model that captures polynomial (nonlinear) relationships. We define the explanatory variable (X) to be the inflation rate and the response variable (Y) to be the poverty rate.</p>
 <p>The regression equation is:</p>
 <p><span class="math display">\[
 \hat{Y} = \beta_0 + \beta_1 \cdot \log(1 + X) + \epsilon
@@ -3657,15 +3657,14 @@ window.Quarto = {
 <li><p><span class="math inline">\(\beta_1\)</span> = Slope (expected change in poverty rate for a one-unit increase in log-transformed inflation)</p></li>
 <li><p><span class="math inline">\(\epsilon\)</span> = Error term</p></li>
 </ul>
-<p>The intercept represents the predicted extreme poverty rate when the inflation rate is close to zero. If intercept is high, it suggests that even in countries with minimal inflation, extreme poverty persists, indicating that other socioeconomic factors play a role in poverty levels. This baseline provides insight into poverty conditions in relatively stable economies.</p>
-<p>The slope represents the expected change in the extreme poverty rate for a one-unit increase in the log-transformed inflation rate. A positive slope suggests that higher inflation is associated with increased poverty, likely due to rising costs of living and reduced purchasing power. Conversely, a negative slope would indicate that higher inflation correlates with lower poverty, possibly reflecting economic growth in certain regions.</p>
-<p>To ensure accurate regression results, we ensured that no infinite values existed after applying the log transformation, averaged the data over all years for each country, and filtered out missing average inflation and average poverty rates to create a cleaned data set where each country is a single observation. By having one <code>x</code> value and one <code>y</code> value per country, that is, one inflation rate and one extreme poverty rate per country, we can reduce yearly fluctuations and provide a clearer long-term trend.</p>
+<p>The intercept represents the predicted extreme poverty rate when the inflation rate is close to zero. If the intercept is high, it suggests that even in countries with minimal inflation, extreme poverty persists, indicating that other socioeconomic factors play a role in poverty levels. This baseline provides insight into poverty conditions in relatively stable economies. The slope represents the expected change in the extreme poverty rate for a one-unit increase in the log-transformed inflation rate. A positive slope suggests that higher inflation is associated with increased poverty, likely due to rising costs of living and reduced purchasing power. Conversely, a negative slope would indicate that higher inflation correlates with lower poverty, possibly reflecting economic growth in certain regions.</p>
+<p>To ensure accurate regression results, we averaged the inflation and poverty rates over all years for each country and filtered out missing data to create a cleaned data set where each country is a single observation. By having one inflation rate and one extreme poverty rate per country, we can reduce yearly fluctuations and provide a clearer long-term trend.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean the dataset to only include one inflation rate and one extreme poverty rate per country</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>clean_data <span class="ot">&lt;-</span> poverty_inflation_data <span class="sc">|&gt;</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.finite</span>(<span class="fu">log1p</span>(inflation_rate))) <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.finite</span>(inflation_rate) <span class="sc">&amp;</span> <span class="fu">is.finite</span>(poverty_rate)) <span class="sc">|&gt;</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">|&gt;</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_inflation_rate =</span> <span class="fu">mean</span>(inflation_rate, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
@@ -3673,8 +3672,8 @@ window.Quarto = {
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(avg_inflation_rate) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(avg_poverty_rate))</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the linear regression model</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>linear_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(avg_poverty_rate <span class="sc">~</span> <span class="fu">log1p</span>(avg_inflation_rate), <span class="at">data =</span> clean_data)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the linear regression model with polynomial terms</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>linear_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(avg_poverty_rate <span class="sc">~</span> <span class="fu">poly</span>(avg_inflation_rate, <span class="dv">2</span>), <span class="at">data =</span> clean_data)</span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>model_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(linear_model)</span>
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>intercept <span class="ot">&lt;-</span> <span class="fu">coef</span>(linear_model)[<span class="dv">1</span>]</span>
@@ -3714,15 +3713,15 @@ Linear Regression Summary
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Intercept (β0)</td>
-<td style="text-align: right;">18.4777377</td>
+<td style="text-align: right;">19.4396480</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Slope (β1)</td>
-<td style="text-align: right;">0.3266604</td>
+<td style="text-align: right;">2.3903246</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">R-squared</td>
-<td style="text-align: right;">0.0002749</td>
+<td style="text-align: right;">0.0407674</td>
 </tr>
 </tbody>
 </table>
@@ -4389,7 +4388,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb8-180"><a href="#cb8-180" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-181"><a href="#cb8-181" aria-hidden="true" tabindex="-1"></a><span class="fu">## Linear Regression Model</span></span>
 <span id="cb8-182"><a href="#cb8-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a>To explore the relationship between inflation rate and extreme poverty rate, we define the explanatory variable (X) to be the inflation rate and the response variable (Y) to be the poverty rate. Since inflation rates are highly skewed, we apply a log transformation to make the relationship more linear.</span>
+<span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a>To explore the relationship between inflation rate and extreme poverty rate, we fit the variables to a linear regression model that captures polynomial (nonlinear) relationships. We define the explanatory variable (X) to be the inflation rate and the response variable (Y) to be the poverty rate. </span>
 <span id="cb8-184"><a href="#cb8-184" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-185"><a href="#cb8-185" aria-hidden="true" tabindex="-1"></a>The regression equation is:</span>
 <span id="cb8-186"><a href="#cb8-186" aria-hidden="true" tabindex="-1"></a></span>
@@ -4409,59 +4408,58 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb8-200"><a href="#cb8-200" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-201"><a href="#cb8-201" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\epsilon$ = Error term</span>
 <span id="cb8-202"><a href="#cb8-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-203"><a href="#cb8-203" aria-hidden="true" tabindex="-1"></a>The intercept represents the predicted extreme poverty rate when the inflation rate is close to zero. If intercept is high, it suggests that even in countries with minimal inflation, extreme poverty persists, indicating that other socioeconomic factors play a role in poverty levels. This baseline provides insight into poverty conditions in relatively stable economies.</span>
+<span id="cb8-203"><a href="#cb8-203" aria-hidden="true" tabindex="-1"></a>The intercept represents the predicted extreme poverty rate when the inflation rate is close to zero. If the intercept is high, it suggests that even in countries with minimal inflation, extreme poverty persists, indicating that other socioeconomic factors play a role in poverty levels. This baseline provides insight into poverty conditions in relatively stable economies. The slope represents the expected change in the extreme poverty rate for a one-unit increase in the log-transformed inflation rate. A positive slope suggests that higher inflation is associated with increased poverty, likely due to rising costs of living and reduced purchasing power. Conversely, a negative slope would indicate that higher inflation correlates with lower poverty, possibly reflecting economic growth in certain regions.</span>
 <span id="cb8-204"><a href="#cb8-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-205"><a href="#cb8-205" aria-hidden="true" tabindex="-1"></a>The slope represents the expected change in the extreme poverty rate for a one-unit increase in the log-transformed inflation rate. A positive slope suggests that higher inflation is associated with increased poverty, likely due to rising costs of living and reduced purchasing power. Conversely, a negative slope would indicate that higher inflation correlates with lower poverty, possibly reflecting economic growth in certain regions.</span>
+<span id="cb8-205"><a href="#cb8-205" aria-hidden="true" tabindex="-1"></a>To ensure accurate regression results, we averaged the inflation and poverty rates over all years for each country and filtered out missing data to create a cleaned data set where each country is a single observation. By having one inflation rate and one extreme poverty rate per country, we can reduce yearly fluctuations and provide a clearer long-term trend.</span>
 <span id="cb8-206"><a href="#cb8-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-207"><a href="#cb8-207" aria-hidden="true" tabindex="-1"></a>To ensure accurate regression results, we ensured that no infinite values existed after applying the log transformation, averaged the data over all years for each country, and filtered out missing average inflation and average poverty rates to create a cleaned data set where each country is a single observation. By having one <span class="in">`x`</span> value and one <span class="in">`y`</span> value per country, that is, one inflation rate and one extreme poverty rate per country, we can reduce yearly fluctuations and provide a clearer long-term trend.</span>
-<span id="cb8-208"><a href="#cb8-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-211"><a href="#cb8-211" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-212"><a href="#cb8-212" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb8-213"><a href="#cb8-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-214"><a href="#cb8-214" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean the dataset to only include one inflation rate and one extreme poverty rate per country</span></span>
-<span id="cb8-215"><a href="#cb8-215" aria-hidden="true" tabindex="-1"></a>clean_data <span class="ot">&lt;-</span> poverty_inflation_data <span class="sc">|&gt;</span></span>
-<span id="cb8-216"><a href="#cb8-216" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.finite</span>(<span class="fu">log1p</span>(inflation_rate))) <span class="sc">|&gt;</span></span>
-<span id="cb8-217"><a href="#cb8-217" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">|&gt;</span></span>
-<span id="cb8-218"><a href="#cb8-218" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
-<span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_inflation_rate =</span> <span class="fu">mean</span>(inflation_rate, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_poverty_rate =</span> <span class="fu">mean</span>(poverty_rate, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb8-222"><a href="#cb8-222" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(avg_inflation_rate) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(avg_poverty_rate))</span>
-<span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the linear regression model</span></span>
-<span id="cb8-225"><a href="#cb8-225" aria-hidden="true" tabindex="-1"></a>linear_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(avg_poverty_rate <span class="sc">~</span> <span class="fu">log1p</span>(avg_inflation_rate), <span class="at">data =</span> clean_data)</span>
-<span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a>model_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(linear_model)</span>
-<span id="cb8-228"><a href="#cb8-228" aria-hidden="true" tabindex="-1"></a>intercept <span class="ot">&lt;-</span> <span class="fu">coef</span>(linear_model)[<span class="dv">1</span>]</span>
-<span id="cb8-229"><a href="#cb8-229" aria-hidden="true" tabindex="-1"></a>slope <span class="ot">&lt;-</span> <span class="fu">coef</span>(linear_model)[<span class="dv">2</span>]</span>
-<span id="cb8-230"><a href="#cb8-230" aria-hidden="true" tabindex="-1"></a>r_squared <span class="ot">&lt;-</span> model_summary<span class="sc">$</span>r.squared</span>
-<span id="cb8-231"><a href="#cb8-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-232"><a href="#cb8-232" aria-hidden="true" tabindex="-1"></a>regression_results <span class="ot">&lt;-</span> <span class="fu">enframe</span>(<span class="fu">c</span>(intercept, slope, r_squared), </span>
-<span id="cb8-233"><a href="#cb8-233" aria-hidden="true" tabindex="-1"></a>                              <span class="at">name =</span> <span class="st">&quot;Term&quot;</span>, </span>
-<span id="cb8-234"><a href="#cb8-234" aria-hidden="true" tabindex="-1"></a>                              <span class="at">value =</span> <span class="st">&quot;Value&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-235"><a href="#cb8-235" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Term =</span> <span class="fu">c</span>(<span class="st">&quot;Intercept (β0)&quot;</span>, <span class="st">&quot;Slope (β1)&quot;</span>, <span class="st">&quot;R-squared&quot;</span>))</span>
-<span id="cb8-236"><a href="#cb8-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-237"><a href="#cb8-237" aria-hidden="true" tabindex="-1"></a>regression_results <span class="sc">|&gt;</span></span>
-<span id="cb8-238"><a href="#cb8-238" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Term&quot;</span>, <span class="st">&quot;Value&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb8-239"><a href="#cb8-239" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot;Linear Regression Summary&quot;</span> <span class="ot">=</span> <span class="dv">2</span>), <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">font_size =</span> <span class="dv">20</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-240"><a href="#cb8-240" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">font_size =</span> <span class="dv">14</span>, <span class="at">extra_css =</span> <span class="st">&quot;text-align: center;&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-241"><a href="#cb8-241" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">extra_css =</span> <span class="st">&quot;text-align: center;&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-242"><a href="#cb8-242" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">12</span>, </span>
-<span id="cb8-243"><a href="#cb8-243" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb8-244"><a href="#cb8-244" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-245"><a href="#cb8-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-246"><a href="#cb8-246" aria-hidden="true" tabindex="-1"></a><span class="fu">## Evaluating Model Fit</span></span>
-<span id="cb8-247"><a href="#cb8-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-248"><a href="#cb8-248" aria-hidden="true" tabindex="-1"></a>**TODO: Haley**</span>
+<span id="cb8-209"><a href="#cb8-209" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-210"><a href="#cb8-210" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb8-211"><a href="#cb8-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-212"><a href="#cb8-212" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean the dataset to only include one inflation rate and one extreme poverty rate per country</span></span>
+<span id="cb8-213"><a href="#cb8-213" aria-hidden="true" tabindex="-1"></a>clean_data <span class="ot">&lt;-</span> poverty_inflation_data <span class="sc">|&gt;</span></span>
+<span id="cb8-214"><a href="#cb8-214" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.finite</span>(inflation_rate) <span class="sc">&amp;</span> <span class="fu">is.finite</span>(poverty_rate)) <span class="sc">|&gt;</span></span>
+<span id="cb8-215"><a href="#cb8-215" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">|&gt;</span></span>
+<span id="cb8-216"><a href="#cb8-216" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb8-217"><a href="#cb8-217" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_inflation_rate =</span> <span class="fu">mean</span>(inflation_rate, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb8-218"><a href="#cb8-218" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_poverty_rate =</span> <span class="fu">mean</span>(poverty_rate, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(avg_inflation_rate) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(avg_poverty_rate))</span>
+<span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-222"><a href="#cb8-222" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the linear regression model with polynomial terms</span></span>
+<span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a>linear_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(avg_poverty_rate <span class="sc">~</span> <span class="fu">poly</span>(avg_inflation_rate, <span class="dv">2</span>), <span class="at">data =</span> clean_data)</span>
+<span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-225"><a href="#cb8-225" aria-hidden="true" tabindex="-1"></a>model_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(linear_model)</span>
+<span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a>intercept <span class="ot">&lt;-</span> <span class="fu">coef</span>(linear_model)[<span class="dv">1</span>]</span>
+<span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a>slope <span class="ot">&lt;-</span> <span class="fu">coef</span>(linear_model)[<span class="dv">2</span>]</span>
+<span id="cb8-228"><a href="#cb8-228" aria-hidden="true" tabindex="-1"></a>r_squared <span class="ot">&lt;-</span> model_summary<span class="sc">$</span>r.squared</span>
+<span id="cb8-229"><a href="#cb8-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-230"><a href="#cb8-230" aria-hidden="true" tabindex="-1"></a>regression_results <span class="ot">&lt;-</span> <span class="fu">enframe</span>(<span class="fu">c</span>(intercept, slope, r_squared), </span>
+<span id="cb8-231"><a href="#cb8-231" aria-hidden="true" tabindex="-1"></a>                              <span class="at">name =</span> <span class="st">&quot;Term&quot;</span>, </span>
+<span id="cb8-232"><a href="#cb8-232" aria-hidden="true" tabindex="-1"></a>                              <span class="at">value =</span> <span class="st">&quot;Value&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-233"><a href="#cb8-233" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Term =</span> <span class="fu">c</span>(<span class="st">&quot;Intercept (β0)&quot;</span>, <span class="st">&quot;Slope (β1)&quot;</span>, <span class="st">&quot;R-squared&quot;</span>))</span>
+<span id="cb8-234"><a href="#cb8-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-235"><a href="#cb8-235" aria-hidden="true" tabindex="-1"></a>regression_results <span class="sc">|&gt;</span></span>
+<span id="cb8-236"><a href="#cb8-236" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Term&quot;</span>, <span class="st">&quot;Value&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-237"><a href="#cb8-237" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot;Linear Regression Summary&quot;</span> <span class="ot">=</span> <span class="dv">2</span>), <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">font_size =</span> <span class="dv">20</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-238"><a href="#cb8-238" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">font_size =</span> <span class="dv">14</span>, <span class="at">extra_css =</span> <span class="st">&quot;text-align: center;&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-239"><a href="#cb8-239" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">extra_css =</span> <span class="st">&quot;text-align: center;&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-240"><a href="#cb8-240" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">12</span>, </span>
+<span id="cb8-241"><a href="#cb8-241" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb8-242"><a href="#cb8-242" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-243"><a href="#cb8-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-244"><a href="#cb8-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-245"><a href="#cb8-245" aria-hidden="true" tabindex="-1"></a><span class="fu">## Evaluating Model Fit</span></span>
+<span id="cb8-246"><a href="#cb8-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-247"><a href="#cb8-247" aria-hidden="true" tabindex="-1"></a>**TODO: Haley**</span>
+<span id="cb8-248"><a href="#cb8-248" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-249"><a href="#cb8-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-250"><a href="#cb8-250" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-251"><a href="#cb8-251" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
-<span id="cb8-252"><a href="#cb8-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-253"><a href="#cb8-253" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span><span class="co">[</span><span class="ot">Poverty and Inequality Platform (PIP) of The World Bank</span><span class="co">](https://pip.worldbank.org/home)</span></span>
-<span id="cb8-254"><a href="#cb8-254" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span><span class="co">[</span><span class="ot">World Bank Group</span><span class="co">](https://data.worldbank.org/indicator/NY.GDP.DEFL.KD.ZG)</span></span>
-<span id="cb8-255"><a href="#cb8-255" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span><span class="co">[</span><span class="ot">Gapminder</span><span class="co">](https://www.gapminder.org/data/)</span></span>
-<span id="cb8-256"><a href="#cb8-256" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span><span class="co">[</span><span class="ot">Extreme Poverty data documentation</span><span class="co">](https://www.gapminder.org/data/documentation/epovrate/)</span></span>
-<span id="cb8-257"><a href="#cb8-257" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span><span class="co">[</span><span class="ot">Organisation for Economic Co-operation and Development (OECD)</span><span class="co">]</span>(https://www.oecd.org/en/data/indicators/nominal-gross-domestic-product-gdp.html#:~:text=Gross%20domestic%20product%20(GDP)%20is,country%20during%20a%20certain%20period.)</span>
+<span id="cb8-250"><a href="#cb8-250" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
+<span id="cb8-251"><a href="#cb8-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-252"><a href="#cb8-252" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span><span class="co">[</span><span class="ot">Poverty and Inequality Platform (PIP) of The World Bank</span><span class="co">](https://pip.worldbank.org/home)</span></span>
+<span id="cb8-253"><a href="#cb8-253" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span><span class="co">[</span><span class="ot">World Bank Group</span><span class="co">](https://data.worldbank.org/indicator/NY.GDP.DEFL.KD.ZG)</span></span>
+<span id="cb8-254"><a href="#cb8-254" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span><span class="co">[</span><span class="ot">Gapminder</span><span class="co">](https://www.gapminder.org/data/)</span></span>
+<span id="cb8-255"><a href="#cb8-255" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span><span class="co">[</span><span class="ot">Extreme Poverty data documentation</span><span class="co">](https://www.gapminder.org/data/documentation/epovrate/)</span></span>
+<span id="cb8-256"><a href="#cb8-256" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span><span class="co">[</span><span class="ot">Organisation for Economic Co-operation and Development (OECD)</span><span class="co">]</span>(https://www.oecd.org/en/data/indicators/nominal-gross-domestic-product-gdp.html#:~:text=Gross%20domestic%20product%20(GDP)%20is,country%20during%20a%20certain%20period.)</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
