@@ -99,7 +99,7 @@ max(poverty_inflation_data$year, na.rm = TRUE)
 
 # Hypothesis
 
-We hypothesize that there will be a nonlinear relationship between inflation rates and poverty rates in the world. Intuitively, frequent fluctuations in inflation rates will be associated with higher poverty rates, as economic instability disproportionately affects people of lower incomes. Additionally, we hypothesize there will be regional or country-specific patterns because economic structures, government policies, and external factors such as tariffs and diplomatic conflict will effect the relationship between inflation and poverty differs across global regions.
+We hypothesize that there will be a nonlinear relationship between inflation rates and poverty rates in the world. Intuitively, frequent fluctuations in inflation rates will be associated with higher poverty rates, as economic instability disproportionately affects people of lower incomes. This tells us intuitively that a linear model will not be sufficient in evaluating the relationship between poverty rates and inflation. We hypothesize there will be regional or country-specific patterns because economic structures, government policies, and external factors such as tariffs and diplomatic conflict will effect the relationship between inflation and poverty differs across global regions, which would result in a nonlinear relationship between inflation and poverty rates in the world. 
 
 # Linear Regression
 
@@ -230,7 +230,30 @@ regression_results |>
 
 ## Evaluating Model Fit
 
-**TODO: Haley**
+After running a linear regression model, we are interested in accessing how much variability our model accounted for in the response values. We are essentially measuring our model's success with variance. 
+
+We begin with accessing variance in our fitted values, as it represents the amount of variablity in the response that was accounted for by our regression model. The variance in our response variables is the total variability in poverty rates, while the variance in residuals is the unexplained error, or variability.  
+```{r}
+#| code-fold: true
+# Calculate variance components
+var_response <- var(clean_data$avg_poverty_rate)
+var_fitted <- var(fitted(linear_model))
+var_residuals <- var(residuals(linear_model))
+
+# Create a nicely formatted table using kableExtra
+variance_table <- data.frame(
+  Metric = c("Variance in Response", "Variance in Fitted Values", "Variance in Residuals"),
+  Variance = c(var_response, var_fitted, var_residuals)
+)
+
+variance_table |>
+  kable("html", caption = "Variance Components in Regression Model") |>
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE)
+
+```
+After assessing our model, we can see that from our $R^2$ = 0.0407, that our model only explains about 4.07% of the variance in poverty rate. We can also see that our residual variance is very high, which tells us that much of the variability in poverty rate is left unexplained by inflation. We can conclude that, although there may be some relationship between inflation and poverty rate, inflation alone is not a strong predictor of poverty rate. 
+
+Though this may seem discouraging, this is still helpful in our analysis. It is important to note here that we are simply exploring the relationship between inflation rate and poverty rate. Inflation being a poor predictor of poverty rate is still helpful in our analysis!  
 
 
 # References
