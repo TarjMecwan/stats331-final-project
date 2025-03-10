@@ -34,11 +34,11 @@ poverty <- read_csv("data/poverty.csv")
 inflation <- read_csv("data/inflation.csv")
 ```
 
-In this analysis, we will explore the relationships between extreme poverty rates and inflation rates around the world. We use data from [@pip] and the [@gdp], specifically the "Extreme Poverty Rate, less than \$2.15/day" and "Inflation, annual %" data sets curated by [@gapminder].
+In this analysis, we will explore the relationships between extreme poverty rates and inflation rates around the world. We use data from the Poverty and Inequality Platform of The World Bank [@pip] and The World Bank Group [@gdp], specifically the "Extreme Poverty Rate, less than \$2.15/day" and "Inflation, annual %" data sets curated by Gapminder [@gapminder].
 
-The poverty dataset contains information on the extreme poverty rate for countries from 1800 to 2100, where a proportion of the population makes less than \$2.15/day, according to Gapminder's [@gmpoverty]. Each country represents one observation and each column represents one year.
+The poverty dataset contains information on the extreme poverty rate for countries from 1800 to 2100, where a proportion of the population makes less than \$2.15/day, according to Gapminder [@gmpoverty]. Each country represents one observation and each column represents one year.
 
-The inflation dataset contains information on the inflation rate for countries from 1961 to 2023. Inflation indicates the rate of change of prices in the economy and is "measured by the annual growth rate of the GDP implicit deflator", which is the "ratio of GDP in current local currency to GDP in constant local currency", according to [@gapminder]. GDP, otherwise known as Gross Domestic Product, is the "standard measure of the value added created through the production of goods and services in a country during a certain period", as stated by The [@OCED]. Each country represents one observation and each column represents one year.
+The inflation dataset contains information on the inflation rate for countries from 1961 to 2023. Inflation indicates the rate of change of prices in the economy and is "measured by the annual growth rate of the GDP implicit deflator", which is the "ratio of GDP in current local currency to GDP in constant local currency", according to Gapminder [@gapminder]. GDP, otherwise known as Gross Domestic Product, is the "standard measure of the value added created through the production of goods and services in a country during a certain period", as stated by The Organisation for Economic Cooperation and Development [@OECD]. Each country represents one observation and each column represents one year.
 
 # Data Cleaning Process
 
