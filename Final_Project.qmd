@@ -295,3 +295,4 @@ ggplot(data = simulated_clean_data,
   theme_minimal()
 ```
 
+All the code is reproducible at this [Github repository](https://github.com/TarjMecwan/stats331-final-project). 
