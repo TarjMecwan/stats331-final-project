@@ -18,7 +18,7 @@ bibliography: references.bib
 
 ```{r}
 #| message: false
-
+library(bibtex)
 library(tidyverse)
 library(knitr)
 library(viridis)
@@ -295,11 +295,3 @@ ggplot(data = simulated_clean_data,
   theme_minimal()
 ```
 
-
-# References
-
-1.  [Poverty and Inequality Platform (PIP) of The World Bank](https://pip.worldbank.org/home)
-2.  [World Bank Group](https://data.worldbank.org/indicator/NY.GDP.DEFL.KD.ZG)
-3.  [Gapminder](https://www.gapminder.org/data/)
-4.  [Extreme Poverty data documentation](https://www.gapminder.org/data/documentation/epovrate/)
-5.  [Organisation for Economic Co-operation and Development (OECD)](https://www.oecd.org/en/data/indicators/nominal-gross-domestic-product-gdp.html#:~:text=Gross%20domestic%20product%20(GDP)%20is,country%20during%20a%20certain%20period.)
