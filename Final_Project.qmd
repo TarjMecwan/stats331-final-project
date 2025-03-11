@@ -317,6 +317,16 @@ simulations_1000_r_squared <- simulations_1000 |>
   map(~ lm(avg_poverty_rate ~ .x, data = simulations_1000)) |>
   map(glance) |>
   map_dbl(~ .x$r.squared)
+
+simulations_1000_r_squared <- simulations_1000_r_squared[names(simulations_1000_r_squared) != "avg_poverty_rate"]
+
+tibble(simulations_1000 = simulations_1000_r_squared) |>
+  ggplot(aes(x = simulations_1000)) +
+  geom_histogram(binwidth = 0.025) +
+  labs(x = expression("Simulated"~R^2),
+       y = "",
+       subtitle = "Number of Simulated Models") +
+  theme_minimal()
 ```
 
 All the code is reproducible at this [Github repository](https://github.com/TarjMecwan/stats331-final-project). 
