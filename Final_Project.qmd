@@ -23,6 +23,7 @@ library(tidyverse)
 library(knitr)
 library(viridis)
 library(kableExtra)
+library(broom)
 ```
 
 # The Data
@@ -263,7 +264,7 @@ We observe from our $R^2$ = 0.0407, that our model only explains about 4.07% of 
 ```{r}
 predictions <- predict(linear_model)
 
-predictions_with_errors <- tibble(predicted_avg_poverty_rate = predictions + sigma(linear_model))
+predictions_with_errors <- tibble(predicted_avg_poverty_rate = predictions + rnorm(length(predictions), mean = 0, sd = sigma(linear_model)))
 ```
 
 ```{r}
@@ -293,6 +294,29 @@ ggplot(data = simulated_clean_data,
        x = "Log(Inflation Rate + 1)",
        y = "") +
   theme_minimal()
+```
+
+## Generating Multiple Predictive Checks
+
+```{r}
+# Generate a 1000 simulations
+simulations_1000 <- map_dfc(.x = 1:1000,
+                            .f = ~tibble(sim = predictions + rnorm(length(predictions), mean = 0, sd = sigma(linear_model))))
+
+# Change column names
+colnames(simulations_1000) <- colnames(simulations_1000) |>
+  str_replace(pattern = "\\.\\.\\.", replace = "_")
+
+simulations_1000 <- clean_data |>
+  filter(!is.na(avg_inflation_rate),
+         !is.na(avg_poverty_rate)) |>
+  select(avg_poverty_rate) |>
+  bind_cols(simulations_1000)
+
+simulations_1000_r_squared <- simulations_1000 |>
+  map(~ lm(avg_poverty_rate ~ .x, data = simulations_1000)) |>
+  map(glance) |>
+  map_dbl(~ .x$r.squared)
 ```
 
 All the code is reproducible at this [Github repository](https://github.com/TarjMecwan/stats331-final-project). 
