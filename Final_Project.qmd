@@ -257,7 +257,7 @@ variance_table |>
   kable_styling(font_size = 12, full_width = FALSE)
 ```
 
-We observe from our $R^2$ = 0.0407, that our model only explains about 4.07% of the variance in poverty rate. We can also see that our residual variance is very high, which tells us that much of the variability in poverty rate is left unexplained by inflation. We can conclude that, although there may be some relationship between inflation and poverty rate, inflation alone is not a strong predictor of poverty rate. Therefore, the quality of our model is not very high, as we've discovered that inflation is a poor predictor of poverty rate.
+We observe from our $R^2$ = 0.0000624, that our model only explains about 0.00624% of the variance in poverty rate. We can also see that our residual variance is very high, which tells us that much of the variability in poverty rate is left unexplained by inflation. We can conclude that, although there may be some relationship between inflation and poverty rate, inflation alone is an extremely weak predictor of poverty rate, indicating that the quality of our model is very low.
 
 # Simulation
 
