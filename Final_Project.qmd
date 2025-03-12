@@ -352,4 +352,6 @@ tibble(simulations_1000 = simulations_1000_r_squared) |>
 
 The plot above shows that our distribution is heavily skewed to the right, such that our $R^2$ values from the simulations are all very close to 0. This proves that our linear model does not accurately predict average poverty rate from average inflation rate.
 
+
+
 All the code is reproducible at this [Github repository](https://github.com/TarjMecwan/stats331-final-project). 
