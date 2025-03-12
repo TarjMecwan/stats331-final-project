@@ -272,17 +272,29 @@ predictions_with_errors <- tibble(predicted_avg_poverty_rate = predictions + rno
 ```
 
 ```{r}
-#| layout-ncol: 2
+#| warning: false
+#| message: false
+#| fig-align: center
+#| fig-cap: "Observed relationship between log-transformed average global inflation rate and average global poverty rate."
 
 # Scatter plot of inflation rate vs. poverty rate for clean observed data
 ggplot(data = clean_data,
        mapping = aes(x = log1p(avg_inflation_rate),
                      y = avg_poverty_rate)) +
-  geom_point(alpha = 0.5, color = "steelblue") +
-  labs(title = "Inflation Rate vs. Poverty Rate (Observed Data)",
-       x = "Log(Inflation Rate + 1)",
+  geom_point(alpha = 0.75, color = "steelblue") +
+  labs(title = "Average Inflation Rate vs. Average Poverty Rate",
+       x = "Log(Average Inflation Rate + 1)",
+       subtitle = "Observed Average Poverty Rate",
        y = "") +
   theme_minimal()
+```
+
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-align: center
+#| fig-cap: "Simulated relationship between log-transformed average global inflation rate and average global poverty rate."
 
 # Construct simulated data
 simulated_clean_data <- clean_data |>
@@ -293,9 +305,10 @@ simulated_clean_data <- clean_data |>
 ggplot(data = simulated_clean_data,
        mapping = aes(x = log1p(avg_inflation_rate),
                      y = predicted_avg_poverty_rate)) +
-  geom_point(alpha = 0.5, color = "steelblue") +
-  labs(title = "Inflation Rate vs. Poverty Rate (Simulated Data)",
-       x = "Log(Inflation Rate + 1)",
+  geom_point(alpha = 0.75, color = "steelblue") +
+  labs(title = "Average Inflation Rate vs. Average Poverty Rate",
+       subtitle = "Simulated Average Poverty Rate",
+       x = "Log(Average Inflation Rate + 1)",
        y = "") +
   theme_minimal()
 ```
