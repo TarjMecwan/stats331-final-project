@@ -352,8 +352,11 @@ tibble(simulations_1000 = simulations_1000_r_squared) |>
 
 The plot above shows that our distribution is heavily skewed to the right, such that our $R^2$ values from the simulations are all very close to 0. This furthers our findings that our linear model does not accurately predict average poverty rate from average inflation rate.
 
-Although a low $R^2$ value and poorly simulated data may initially seem disappointing, we would like to note here that these results actually confirm our initial intuition and hypothesis. We hypothesized that there would be a nonlinear relationship between inflation rates and poverty rates in the world, because economic states of countries are widely sensitive to a multitude of external factors. Regional/country-specific patterns such as economic structures, government policies, and external factors (tariffs and diplomatic conflict) ultimately effect the relationship between inflation and poverty across global regions. 
 
-Our findings are largely helpful in our analysis, as our goal was to explore the relationship between inflation rates on poverty rates. We can conclude here that average inflation rates alone are poor predictors of average poverty rates, and there must be additional factors that drive and shrink average inflation rates (as we previously hypothesized). 
+# Conclusion
 
-All the code is reproducible at this [Github repository](https://github.com/TarjMecwan/stats331-final-project). 
+Although a low $R^2$ value and poorly simulated data may seem disappointing, we would like to note that these results actually confirm our initial intuition and hypothesis. We hypothesized that there would be a nonlinear relationship between inflation rates and poverty rates in the world, because economic states of countries are widely sensitive to a multitude of external factors. Regional/country-specific patterns such as economic structures, government policies, and external factors (tariffs and diplomatic conflict) ultimately affect the relationship between inflation and poverty across global regions. 
+
+Our findings are largely helpful in our analysis, as our goal was to explore the relationship between inflation rates on poverty rates. We can conclude here that average inflation rates alone are poor predictors of average poverty rates, and there must be additional factors that drive and shrink average inflation rates. 
+
+All our code is reproducible at this [Github repository](https://github.com/TarjMecwan/stats331-final-project). 
