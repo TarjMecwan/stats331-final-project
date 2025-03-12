@@ -207,8 +207,8 @@ clean_data <- poverty_inflation_data |>
   ) |>
   filter(!is.na(avg_inflation_rate) & !is.na(avg_poverty_rate))
 
-# Fit the linear regression model with polynomial terms
-linear_model <- lm(avg_poverty_rate ~ poly(avg_inflation_rate, 2), data = clean_data)
+# Fit the linear regression model
+linear_model <- lm(avg_poverty_rate ~ avg_inflation_rate, data = clean_data)
 
 model_summary <- summary(linear_model)
 intercept <- coef(linear_model)[1]
@@ -263,6 +263,8 @@ We observe from our $R^2$ = 0.0407, that our model only explains about 4.07% of 
 
 ## Visualizing Simulations from the Model
 
+Once we fit and evaluated our model, we simulated our response variable, average poverty rate, to compare the results of our model to that of the observed data.
+
 ```{r}
 predictions <- predict(linear_model)
 
@@ -297,8 +299,12 @@ ggplot(data = simulated_clean_data,
        y = "") +
   theme_minimal()
 ```
+After simulating our response variable and plotting the observed average poverty rate and the simulated average poverty rate, we found that the simulated data is not very similar to the observed data. The simulated average poverty rates range from below -40 to above 40 while the observed average poverty rate ranges from 0 to above 70. Although the simulated data does not replicate the observed data very accurately, their ranges have a similar size.
+Considering that we found our $R^2$ value to be very low, it makes sense that our simulated data would not match the observed data well.
 
 ## Generating Multiple Predictive Checks
+
+Finally, after comparing the observed data to one simulation, we generated 1,000 simulations and plotted the distribution of the $R^2$ values.
 
 ```{r}
 # Generate a 1000 simulations
@@ -330,5 +336,7 @@ tibble(simulations_1000 = simulations_1000_r_squared) |>
        subtitle = "Number of Simulated Models") +
   theme_minimal()
 ```
+
+The plot above shows that our distribution is heavily skewed to the right, such that our $R^2$ values from the simulations are all very close to 0. This proves that our linear model does not accurately predict average poverty rate from average inflation rate.
 
 All the code is reproducible at this [Github repository](https://github.com/TarjMecwan/stats331-final-project). 
