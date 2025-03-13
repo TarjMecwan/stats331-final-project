@@ -101,7 +101,7 @@ max(poverty_inflation_data$year, na.rm = TRUE)
 
 # Hypothesis
 
-We hypothesize that there will be a nonlinear relationship between inflation rates and poverty rates in the world. Intuitively, frequent fluctuations in inflation rates will be associated with higher poverty rates, as economic instability disproportionately affects people of lower incomes. As such, we think that a linear model will not be sufficient in evaluating the relationship between poverty rates and inflation. 
+We hypothesize that there will be a nonlinear relationship between inflation rates and poverty rates in the world. Intuitively, frequent fluctuations in inflation rates will be associated with higher poverty rates, as economic instability disproportionately affects people of lower incomes. As such, we think that a linear model will not be sufficient in evaluating the relationship between poverty rates and inflation. We further hypothesize that there will be regional or country-specific patterns because economic structures, government policies, and external factors such as tariffs and diplomatic conflict would likely affect the relationship between inflation and poverty differs across global regions, which would result in a nonlinear relationship between inflation and poverty rates in the world.
 
 # Linear Regression
 
@@ -390,17 +390,23 @@ simulations_1000_r_squared <- simulations_1000 |>
   map_dbl(~ .x$r.squared)
 
 simulations_1000_r_squared <- simulations_1000_r_squared[names(simulations_1000_r_squared) != "avg_poverty_rate"]
+```
+
+```{r}
+#| fig-align: center
+#| fig-cap: "Distribution of R^2 values from the 1,000 simulations of poverty rates based on inflation rate." 
 
 tibble(simulations_1000 = simulations_1000_r_squared) |>
   ggplot(aes(x = simulations_1000)) +
   geom_histogram(binwidth = 0.025) +
-  labs(x = expression("Simulated"~R^2),
-       y = "",
-       subtitle = "Number of Simulated Models") +
+  labs(title = "Distribution of R^2 values from Simulated Models",
+       subtitle = "Number of Simulated Models",
+       x = expression("Simulated"~R^2),
+       y = "") +
   theme_minimal()
 ```
 
-The plot above shows that our distribution is heavily skewed to the right, such that our $R^2$ values from the simulations are all very close to 0. This furthers our findings that our linear model does not accurately predict average poverty rate from average inflation rate.
+The plot above shows that our distribution is heavily skewed to the right, such that our $R^2$ values from the simulations are all very close to 0. This further proves our findings that our linear model does not accurately predict average poverty rate from average inflation rate, as it shows that the data simulated under the linear regression model is very different from what was observed. 
 
 # Conclusion
 
