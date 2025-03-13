@@ -247,6 +247,39 @@ regression_results |>
                 full_width = FALSE)
 ```
 
+## Interpretation of the Linear Regression Model
+
+The estimated regression equation for the relationship between **inflation rate** and **extreme poverty rate** is:
+
+$$
+\hat{Y} = 19.84 + 0.011 \cdot \log(1 + X) + \epsilon
+$$
+
+where:
+
+- **$\hat{Y}$** represents the predicted extreme poverty rate.
+- **$X$** is the **log-transformed inflation rate**.
+- **$19.84$ (Intercept)** represents the estimated extreme poverty rate when the **inflation rate is near zero**.
+- **$0.011$ (Slope)** represents the **expected change in extreme poverty rate for a one-unit increase in the log-transformed inflation rate**.
+- **$\epsilon$** is the error term, accounting for variability not explained by inflation.
+
+### **Interpretation of Regression Coefficients**
+
+#### **Intercept (19.84) Interpretation**
+The intercept of our model represents the estimated extreme poverty rate when the inflation rate is near zero. This means that if a country had a 0% inflation rate, the model predicts an extreme poverty rate of approximately 19.84%. A high intercept suggests that even in stable economies with minimal inflation, extreme poverty still exists due to other economic and social factors.
+
+#### **Slope (0.011) Interpretation**
+The slope of the regression model indicates the expected change in the extreme poverty rate for each one-unit increase in the log-transformed inflation rate. Since the slope is 0.011, this suggests that a one-unit increase in the log-transformed inflation rate corresponds to an increase of 0.011 percentage points in extreme poverty rate. This small positive slope indicates that inflation has a weak association with increasing poverty rates. This aligns with economic theory that rising inflation can erode purchasing power, making it harder for lower-income populations to afford necessities. However, the small magnitude of the slope suggests that inflation alone is not a major driver of extreme poverty.
+
+### **Model Fit & $R^2$ Interpretation**
+The **$R^2$** value, which measures how well the model explains the variability in the response variable, is 0.0000624. This means that only 0.00624% of the variation in extreme poverty rates is explained by the log-transformed inflation rate. Since our $R^2$ value is extremely low, it indicates that inflation alone is a very weak predictor of extreme poverty rates. This suggests that other factors—such as employment opportunities, education levels, social policies, and external economic conditions—play a significant role in determining poverty levels.
+
+### **Key Takeaways from the Regression Model**
+- Inflation appears to have a weak but slightly positive relationship with extreme poverty rates.
+- The model suggests that other variables besides inflation are driving changes in poverty rates.
+- The low $R^2$ value confirms that inflation alone is not a sufficient predictor of poverty levels.
+- Future analyses should consider additional economic indicators such as GDP per capita, employment rates, and government welfare policies to improve the predictive power of the model.
+
 
 ## Evaluating Model Fit
 
