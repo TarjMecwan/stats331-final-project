@@ -82,7 +82,7 @@ poverty_inflation_data <- inflation_filtered_long |>
     as.numeric(inflation_rate)))
 ```
 
-The cleaned dataset contains 10,163 observations and 4 variables with information about the annual inflation and extreme poverty rates for 190 countries from 1961 to 2023. Each country-year pair represents one observation.
+The combined dataset contains 10,163 observations and 4 variables with information about the annual inflation and extreme poverty rates for 190 countries from 1961 to 2023. Each country-year pair represents one observation.
 
 ```{r}
 #| eval: false
@@ -101,7 +101,7 @@ max(poverty_inflation_data$year, na.rm = TRUE)
 
 # Hypothesis
 
-We hypothesize that there will be a nonlinear relationship between inflation rates and poverty rates in the world. Intuitively, frequent fluctuations in inflation rates will be associated with higher poverty rates, as economic instability disproportionately affects people of lower incomes. This tells us intuitively that a linear model will not be sufficient in evaluating the relationship between poverty rates and inflation. We hypothesize there will be regional or country-specific patterns because economic structures, government policies, and external factors such as tariffs and diplomatic conflict will effect the relationship between inflation and poverty differs across global regions, which would result in a nonlinear relationship between inflation and poverty rates in the world.
+We hypothesize that there will be a nonlinear relationship between inflation rates and poverty rates in the world. Intuitively, frequent fluctuations in inflation rates will be associated with higher poverty rates, as economic instability disproportionately affects people of lower incomes. As such, we think that a linear model will not be sufficient in evaluating the relationship between poverty rates and inflation. 
 
 # Linear Regression
 
@@ -190,7 +190,9 @@ where:
 
 -   $\epsilon$ = Error term
 
-The intercept represents the predicted extreme poverty rate when the inflation rate is close to zero. If the intercept is high, it suggests that even in countries with minimal inflation, extreme poverty persists, indicating that other socioeconomic factors play a role in poverty levels. This baseline provides insight into poverty conditions in relatively stable economies. The slope represents the expected change in the extreme poverty rate for a one-unit increase in the log-transformed inflation rate. A positive slope suggests that higher inflation is associated with increased poverty, likely due to rising costs of living and reduced purchasing power. Conversely, a negative slope would indicate that higher inflation correlates with lower poverty, possibly reflecting economic growth in certain regions.
+The intercept represents the predicted extreme poverty rate when the inflation rate is close to zero. This baseline provides insight into poverty conditions in relatively stable economies.
+
+The slope represents the expected change in the extreme poverty rate for a one-unit increase in the log-transformed inflation rate. A positive slope suggests that higher inflation is associated with increased poverty, likely due to rising costs of living and reduced purchasing power. Conversely, a negative slope would indicate that higher inflation correlates with lower poverty, possibly reflecting economic growth in certain regions.
 
 To ensure accurate regression results, we averaged the inflation and poverty rates over all years for each country and filtered out missing data to create a cleaned data set where each country is a single observation. By having one inflation rate and one extreme poverty rate per country, we can reduce yearly fluctuations and provide a clearer long-term trend. The scatterplot below illustrates the averaged values in the cleaned data set that we will use to fit the linear regression model.
 
@@ -223,6 +225,8 @@ ggplot(data = clean_data,
   theme_minimal()
 ```
 
+After we fit the cleaned data of the average inflation and average poverty rates from 1961 to 2023 for each country to a linear regression model, we get the following statistical outputs.
+
 ```{r}
 # Fit the linear regression model
 linear_model <- lm(avg_poverty_rate ~ avg_inflation_rate, data = clean_data)
@@ -247,9 +251,7 @@ regression_results |>
                 full_width = FALSE)
 ```
 
-## Interpretation of the Linear Regression Model
-
-The estimated regression equation for the relationship between **inflation rate** and **extreme poverty rate** is:
+From the outputs, we can write the estimated regression equation for the relationship between average inflation rate and average poverty rate as:
 
 $$
 \hat{Y} = 19.84 + 0.011 \cdot \log(1 + X) + \epsilon
@@ -257,29 +259,21 @@ $$
 
 where:
 
-- **$\hat{Y}$** represents the predicted extreme poverty rate.
-- **$X$** is the **log-transformed inflation rate**.
-- **$19.84$ (Intercept)** represents the estimated extreme poverty rate when the **inflation rate is near zero**.
-- **$0.011$ (Slope)** represents the **expected change in extreme poverty rate for a one-unit increase in the log-transformed inflation rate**.
-- **$\epsilon$** is the error term, accounting for variability not explained by inflation.
+-   $\hat{Y}$ = Predicted extreme poverty rate
 
-### **Interpretation of Regression Coefficients**
+-   $X$ = log-transformed inflation rate
 
-#### **Intercept (19.84) Interpretation**
-The intercept of our model represents the estimated extreme poverty rate when the inflation rate is near zero. This means that if a country had a 0% inflation rate, the model predicts an extreme poverty rate of approximately 19.84%. A high intercept suggests that even in stable economies with minimal inflation, extreme poverty still exists due to other economic and social factors.
+-   $19.84$ = Intercept (estimated extreme poverty rate when the inflation rate is near zero)
 
-#### **Slope (0.011) Interpretation**
+-   $0.011$ = Slope (expected change in extreme poverty rate for a one-unit increase in the log-transformed inflation rate)
+
+-   $\epsilon$ = Error term (accounting for variability not explained by inflation)
+
+The intercept of our model represents the estimated extreme poverty rate when the inflation rate is near zero. This means that if a country had a 0% inflation rate, the model predicts an extreme poverty rate of approximately 19.84%. This relatively low intercept suggests that even in stable economies with minimal inflation, extreme poverty still exists due to other economic and social factors.
+
 The slope of the regression model indicates the expected change in the extreme poverty rate for each one-unit increase in the log-transformed inflation rate. Since the slope is 0.011, this suggests that a one-unit increase in the log-transformed inflation rate corresponds to an increase of 0.011 percentage points in extreme poverty rate. This small positive slope indicates that inflation has a weak association with increasing poverty rates. This aligns with economic theory that rising inflation can erode purchasing power, making it harder for lower-income populations to afford necessities. However, the small magnitude of the slope suggests that inflation alone is not a major driver of extreme poverty.
 
-### **Model Fit & $R^2$ Interpretation**
-The **$R^2$** value, which measures how well the model explains the variability in the response variable, is 0.0000624. This means that only 0.00624% of the variation in extreme poverty rates is explained by the log-transformed inflation rate. Since our $R^2$ value is extremely low, it indicates that inflation alone is a very weak predictor of extreme poverty rates. This suggests that other factors—such as employment opportunities, education levels, social policies, and external economic conditions—play a significant role in determining poverty levels.
-
-### **Key Takeaways from the Regression Model**
-- Inflation appears to have a weak but slightly positive relationship with extreme poverty rates.
-- The model suggests that other variables besides inflation are driving changes in poverty rates.
-- The low $R^2$ value confirms that inflation alone is not a sufficient predictor of poverty levels.
-- Future analyses should consider additional economic indicators such as GDP per capita, employment rates, and government welfare policies to improve the predictive power of the model.
-
+The $R^2$ value, which measures how well the model explains the variability in the response variable, is 0.0000624. This means that only 0.00624% of the variation in extreme poverty rates is explained by the log-transformed inflation rate. Since our $R^2$ value is extremely low, it indicates that inflation alone is a very weak predictor of extreme poverty rates. This suggests that other factors—such as employment opportunities, education levels, social policies, and external economic conditions—play a significant role in determining poverty levels.
 
 ## Evaluating Model Fit
 
@@ -324,6 +318,8 @@ predictions_with_errors <- tibble(predicted_avg_poverty_rate = predictions + rno
                                                                                    sd = sigma(linear_model)))
 ```
 
+The scatterplots below illustrate the observed and simulated relationships, respectively, between log-transformed average global inflation rate and average global poverty rate.
+
 ```{r}
 #| warning: false
 #| message: false
@@ -342,7 +338,6 @@ ggplot(data = clean_data,
   scale_y_continuous(limits = c(-40, 80)) +
   theme_minimal()
 ```
-
 
 ```{r}
 #| warning: false
@@ -367,8 +362,8 @@ ggplot(data = simulated_clean_data,
   scale_y_continuous(limits = c(-40, 80)) +
   theme_minimal()
 ```
-After simulating our response variable and plotting the observed average poverty rate and the simulated average poverty rate, we found that the simulated data is not very similar to the observed data. The simulated average poverty rates range from below -40 to above 40 while the observed average poverty rate ranges from 0 to above 70. Although the simulated data does not replicate the observed data very accurately, their ranges have a similar size.
-Considering that we found our $R^2$ value to be very low, it makes sense that our simulated data would not match the observed data well.
+
+After simulating our response variable and plotting the observed average poverty rate and the simulated average poverty rate, we found that the simulated data is not very similar to the observed data. The simulated average poverty rates range from below -40 to above 40 while the observed average poverty rate ranges from 0 to above 70. Although the simulated data does not replicate the observed data very accurately, their ranges have a similar size. Considering that we found our $R^2$ value to be very low, it makes sense that our simulated data would not match the observed data well.
 
 ## Generating Multiple Predictive Checks
 
@@ -407,11 +402,10 @@ tibble(simulations_1000 = simulations_1000_r_squared) |>
 
 The plot above shows that our distribution is heavily skewed to the right, such that our $R^2$ values from the simulations are all very close to 0. This furthers our findings that our linear model does not accurately predict average poverty rate from average inflation rate.
 
-
 # Conclusion
 
-Although a low $R^2$ value and poorly simulated data may seem disappointing, we would like to note that these results actually confirm our initial intuition and hypothesis. We hypothesized that there would be a nonlinear relationship between inflation rates and poverty rates in the world, because economic states of countries are widely sensitive to a multitude of external factors. Regional/country-specific patterns such as economic structures, government policies, and external factors (tariffs and diplomatic conflict) ultimately affect the relationship between inflation and poverty across global regions. 
+Although a low $R^2$ value and poorly simulated data may seem disappointing, we would like to note that these results actually confirm our initial intuition and hypothesis. We hypothesized that there would be a nonlinear relationship between inflation rates and poverty rates in the world, because economic states of countries are widely sensitive to a multitude of external factors. Regional/country-specific patterns such as economic structures, government policies, and external factors (tariffs and diplomatic conflict) ultimately affect the relationship between inflation and poverty across global regions.
 
-Our findings are largely helpful in our analysis, as our goal was to explore the relationship between inflation rates on poverty rates. We can conclude here that average inflation rates alone are poor predictors of average poverty rates, and there must be additional factors that drive and shrink average inflation rates. 
+Our findings are largely helpful in our analysis, as our goal was to explore the relationship between inflation rates on poverty rates. We can conclude here that average inflation rates alone are poor predictors of average poverty rates, and there must be additional factors that drive and shrink average inflation rates.
 
-All our code is reproducible at this [Github repository](https://github.com/TarjMecwan/stats331-final-project). 
+All our code is reproducible at this [Github repository](https://github.com/TarjMecwan/stats331-final-project).
