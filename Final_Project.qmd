@@ -282,10 +282,11 @@ ggplot(data = clean_data,
        mapping = aes(x = log1p(avg_inflation_rate),
                      y = avg_poverty_rate)) +
   geom_point(alpha = 0.75, color = "steelblue") +
-  labs(title = "Average Inflation Rate vs. Average Poverty Rate",
+  labs(title = "Average Inflation Rate vs. Observed Average Poverty Rate",
        x = "Log(Average Inflation Rate + 1)",
        subtitle = "Observed Average Poverty Rate",
        y = "") +
+  scale_y_continuous(limits = c(-40, 80)) +
   theme_minimal()
 ```
 
@@ -306,10 +307,11 @@ ggplot(data = simulated_clean_data,
        mapping = aes(x = log1p(avg_inflation_rate),
                      y = predicted_avg_poverty_rate)) +
   geom_point(alpha = 0.75, color = "steelblue") +
-  labs(title = "Average Inflation Rate vs. Average Poverty Rate",
+  labs(title = "Average Inflation Rate vs. Simulated Average Poverty Rate",
        subtitle = "Simulated Average Poverty Rate",
        x = "Log(Average Inflation Rate + 1)",
        y = "") +
+  scale_y_continuous(limits = c(-40, 80)) +
   theme_minimal()
 ```
 After simulating our response variable and plotting the observed average poverty rate and the simulated average poverty rate, we found that the simulated data is not very similar to the observed data. The simulated average poverty rates range from below -40 to above 40 while the observed average poverty rate ranges from 0 to above 70. Although the simulated data does not replicate the observed data very accurately, their ranges have a similar size.
