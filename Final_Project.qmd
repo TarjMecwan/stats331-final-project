@@ -170,17 +170,17 @@ From this graph, we observe that 1961-1980 is characterized by low to moderate a
 
 ## Linear Regression Model
 
-To explore the relationship between inflation rate and extreme poverty rate, we fit the variables to a linear regression model that captures polynomial (nonlinear) relationships. We define the explanatory variable (X) to be the inflation rate and the response variable (Y) to be the poverty rate.
+To explore the relationship between inflation rate and extreme poverty rate, we fit the variables to a linear regression model. We define the explanatory variable (X) to be the inflation rate and the response variable (Y) to be the poverty rate.
 
-The regression equation is:
+The population model is expressed as:
 
 $$
-\hat{Y} = \beta_0 + \beta_1 \cdot \log(1 + X) + \epsilon
+Y = \beta_0 + \beta_1 \cdot \log(1 + X) + \epsilon
 $$
 
 where:
 
--   $\hat{Y}$ = Predicted poverty rate
+-   $Y$ = Observed poverty rate
 
 -   $X$ = Log-transformed inflation rate
 
@@ -192,10 +192,12 @@ where:
 
 The intercept represents the predicted extreme poverty rate when the inflation rate is close to zero. If the intercept is high, it suggests that even in countries with minimal inflation, extreme poverty persists, indicating that other socioeconomic factors play a role in poverty levels. This baseline provides insight into poverty conditions in relatively stable economies. The slope represents the expected change in the extreme poverty rate for a one-unit increase in the log-transformed inflation rate. A positive slope suggests that higher inflation is associated with increased poverty, likely due to rising costs of living and reduced purchasing power. Conversely, a negative slope would indicate that higher inflation correlates with lower poverty, possibly reflecting economic growth in certain regions.
 
-To ensure accurate regression results, we averaged the inflation and poverty rates over all years for each country and filtered out missing data to create a cleaned data set where each country is a single observation. By having one inflation rate and one extreme poverty rate per country, we can reduce yearly fluctuations and provide a clearer long-term trend.
+To ensure accurate regression results, we averaged the inflation and poverty rates over all years for each country and filtered out missing data to create a cleaned data set where each country is a single observation. By having one inflation rate and one extreme poverty rate per country, we can reduce yearly fluctuations and provide a clearer long-term trend. The scatterplot below illustrates the averaged values in the cleaned data set that we will use to fit the linear regression model.
 
 ```{r}
 #| warning: false
+#| fig-align: center
+#| fig-cap: "Relationship between average inflation rate and average extreme poverty rate from 1961 to 2023 for each country."
 
 # Clean the dataset to only include one inflation rate and one extreme poverty rate per country
 clean_data <- poverty_inflation_data |>
@@ -207,6 +209,21 @@ clean_data <- poverty_inflation_data |>
   ) |>
   filter(!is.na(avg_inflation_rate) & !is.na(avg_poverty_rate))
 
+# Scatter plot of average inflation rate vs. average poverty rate
+ggplot(data = clean_data, 
+       mapping = aes(x = avg_inflation_rate, 
+                     y = avg_poverty_rate)) +
+  geom_point(alpha = 0.5, color = "steelblue") +
+  labs(
+    title = "Average Inflation Rate vs. Average Poverty Rate",
+    subtitle = "Average Poverty Rate (%)",
+    x = "Average Inflation Rate (%)",
+    y = "") +
+  scale_y_continuous(limits = c(-40, 80)) +
+  theme_minimal()
+```
+
+```{r}
 # Fit the linear regression model
 linear_model <- lm(avg_poverty_rate ~ avg_inflation_rate, data = clean_data)
 
@@ -229,6 +246,7 @@ regression_results |>
   kable_styling(font_size = 12, 
                 full_width = FALSE)
 ```
+
 
 ## Evaluating Model Fit
 
@@ -268,7 +286,9 @@ Once we fit and evaluated our model, we simulated our response variable, average
 ```{r}
 predictions <- predict(linear_model)
 
-predictions_with_errors <- tibble(predicted_avg_poverty_rate = predictions + rnorm(length(predictions), mean = 0, sd = sigma(linear_model)))
+predictions_with_errors <- tibble(predicted_avg_poverty_rate = predictions + rnorm(length(predictions), 
+                                                                                   mean = 0, 
+                                                                                   sd = sigma(linear_model)))
 ```
 
 ```{r}
@@ -277,7 +297,7 @@ predictions_with_errors <- tibble(predicted_avg_poverty_rate = predictions + rno
 #| fig-align: center
 #| fig-cap: "Observed relationship between log-transformed average global inflation rate and average global poverty rate."
 
-# Scatter plot of inflation rate vs. poverty rate for clean observed data
+# Scatter plot of log-transformed inflation rate vs. poverty rate for clean observed data
 ggplot(data = clean_data,
        mapping = aes(x = log1p(avg_inflation_rate),
                      y = avg_poverty_rate)) +
@@ -302,7 +322,7 @@ simulated_clean_data <- clean_data |>
   select(avg_inflation_rate) |>
   bind_cols(predictions_with_errors)
 
-# Scatter plot of inflation rate vs. poverty rate for clean simulated data
+# Scatter plot of log-transformed inflation rate vs. poverty rate for clean simulated data
 ggplot(data = simulated_clean_data,
        mapping = aes(x = log1p(avg_inflation_rate),
                      y = predicted_avg_poverty_rate)) +
